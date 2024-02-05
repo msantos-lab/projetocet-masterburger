@@ -1,0 +1,9 @@
+﻿<div class="header-icon header-icon header-search-inline header-search-category d-flex pt-3">
+<form asp-controller="Produto" asp-action="ResultadoPesquisa" method="post" class="mb-0">
+	<div class="header-search-wrapper">
+		<input type="search" class="form-control" placeholder="Pesquisar..." name="searchString" value="@ViewData["searchString"]" required>
+
+		<button class="btn icon-search-3 p-0" type="submit"><i class="porto-icon-search-3"></i></button>
+	</div><!-- End .header-search-wrapper -->
+</form>
+</div><!-- End .header-search -->

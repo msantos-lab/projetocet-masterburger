@@ -1,0 +1,147 @@
+﻿@model MasterBurger.Areas.Admin.Views.ViewsModels.AdminEcomendaDetalhesViewModel
+
+@{
+	ViewData["Title"] = "Detalhe da Encomenda  - Nº " + @Model.EncomendaId;
+}
+
+
+<div class="card">
+	<div class="d-md-flex justify-content-between mb-4">
+		<div class="mb-3 mb-md-0 title-pg">
+			<h2>@ViewData["Title"]</h2>
+		</div>
+		<div class="col-3 d-print-none d-flex justify-content-end">
+			<button onclick="window.print()" class="btn btn-secondary"> <img src="~/dashboard/images/impressora.png" width="24" /> Imprimir</button>
+		</div>
+	</div>
+
+	<div class="row flex-column flex-md-row">
+		<div class="col-md-4">
+			<div class="title-detail-encomendas">
+				<h4>Dados para o Envio:</h4>
+			</div>
+			<div>
+				<p><b>Nome:</b> @Model.Nome @Model.Apelido</p>
+				<p><b>NIF:</b> @Model.NIF</p>
+				<p><b>Email:</b> @Model.Email</p>
+				<p><b>Morada:</b> @Model.Morada</p>
+				<p><b>Localidade:</b> @Model.Localidade</p>
+				<p><b>Código Postal:</b> @Model.CodigoPostal</p>
+			</div>
+		</div>
+		<div class="col-md-4 lg-md-5 mt-md-0 mt-5">
+			<div class="title-detail-encomendas">
+				<h4>Dados da Encomenda:</h4>
+			</div>
+			<div>
+				<p><b>Data da Encomenda:</b> @Model.EncomendaRealizada</p>
+				<p class="d-print-none"><b>Data da Entrega:</b> @Model.EncomendaConcluida</p>
+				<p class="d-print-none">
+					<b>Status Atual:</b>
+					@if (Model.Status == "Pronto para Entrega") {
+						<span class="badge bg-primary">@Html.DisplayFor(modelItem => Model.Status)</span>
+					} else if (Model.Status == "Em Rota") {
+						<span class="badge bg-info text-dark">@Html.DisplayFor(modelItem => Model.Status)</span>
+					} else if (Model.Status == "Entregue") {
+						<span class="badge bg-success">@Html.DisplayFor(modelItem => Model.Status)</span>
+					} else {
+						<span class="badge bg-danger">@Html.DisplayFor(modelItem => Model.Status)</span>
+					}
+				</p>
+			</div>
+		</div>
+		<div class="col-md-4 lg-md-5 mt-md-0 mt-5 d-print-none">
+			<div class="title-detail-encomendas">
+				<h4>Alterar Status da Encomenda:</h4>
+			</div>
+			<div class="mt-6">
+				@if (@Model.EncomendaConcluida == null) {
+					<form method="post" asp-action="AlterarStatusEncomenda" asp-route-id="@Model.EncomendaId">
+						<div class="form-group" style="width: 230px;">
+							<select name="Status" class="form-control">
+								<option value="">@Model.Status</option>
+								<option value="Em Rota">Em Rota</option>
+								<option value="Entregue">Entregue</option>
+							</select>
+						</div>
+
+						<div class="form-group">
+							<input type="submit" value="Salvar" class="btn btn-primary mt-3 mb-6" />
+						</div>
+					</form>
+				} else {
+					<p>Encomenda concluída </p>
+				}
+			</div>
+		</div>
+	</div>
+
+	@{
+		decimal subtotalGeral = 0;
+		decimal subtotalItem = 0;
+	}
+
+	<div class="row mt-5">
+		<div class="title-detail-encomendas">
+			<h4>Produtos:</h4>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-bordered">
+				<thead>
+					<tr class="tabela-prod-th">
+						<th class="d-print-none">Produto ID</th>
+						<th>Nome</th>
+						<th>Quantidade</th>
+						<th>Preço</th>
+						<th>Subtotal</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var produto in Model.Produtos) {
+						<tr class="tabela-prod-td">
+							<td class="d-print-none">@produto.ProdutoId</td>
+							<td>@produto.Nome</td>
+							<td>@produto.Quantidade</td>
+							<td>@produto.Preco.ToString("c")</td>
+							@{
+								subtotalItem = produto.Quantidade * produto.Preco;
+								subtotalGeral += subtotalItem;
+							}
+							<td>@subtotalItem.ToString("c")</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+			<table class="table table-totals py-2 mt-2">
+				<tfoot>
+					@if (Model.CodigoCupom != null) {
+
+						<tr>
+							<td class="text-uppercase py-3 px-3 text-start fw-bold" style="font-size: 14px;">Subtotal</td>
+							<td class="py-3 px-3 text-end fw-bold" style="font-size: 14px;">@subtotalGeral.ToString("c")</td>
+						</tr>
+						<tr class="bg-light">
+							<td class="text-uppercase py-3 px-3 text-start fw-bold" style="font-size: 14px;">Desconto Aplicado</td>
+							<td class="py-3 px-3 text-end fw-bold" style="font-size: 14px;">- @Model.DescontoPercentual%</td>
+						</tr>
+						<tr>
+							<td class="text-uppercase text-start fw-bold" style="font-size: 14px;">Total</td>
+							<td class="text-end fw-bold" style="font-size: 14px;">@Model.EncomendaTotal.ToString("c")</td>
+						</tr>
+					} else {
+						<tr>
+							<td class="text-uppercase text-start fw-bold" style="font-size: 14px;">Total</td>
+							<td class="text-end fw-bold" style="font-size: 14px;"> @subtotalGeral.ToString("c")</td>
+						</tr>
+					}
+
+				</tfoot>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-4 d-print-none">
+		<div class="col-3 mt-4">
+			<a asp-action="Index" class="btn btn-primary">Voltar</a>
+		</div>
+	</div>
+</div>

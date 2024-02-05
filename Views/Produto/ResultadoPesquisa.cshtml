@@ -1,0 +1,59 @@
+﻿@model ResultadoPesquisaViewModel
+
+@{
+	ViewData["Title"] = "Resultado Pesquisa";
+}
+
+<div class="container my-5">
+	@{
+		int qtProdutos = Model.Produtos.Count(p => p.IsDisponivel);
+	}
+
+	@if (qtProdutos > 0) {
+		<div class="mt-6 row row-sm">
+			@{
+				int count = 0;
+			}
+			@foreach (var produto in Model.Produtos) {
+				count++;
+			}
+			<div class="pb-2 title-destaq col">
+				<h2>Resultado da Pesquisa: </h2>
+				<p>
+					@{
+						string foram = (count > 1) ? "Foram encontrados" : "Foi encontrado";
+						string produtos = (count > 1) ? "produtos" : "produto";
+					}
+					@foram  @count  @produtos para <span class="fw-bold text-uppercase">@ViewData["termoPesquisa"]</span>.
+				</p>
+			</div>
+		</div>
+		<div class="row" id="productsContainer">
+
+
+			<div class="row">
+				@if (Model.Produtos != null) {
+					var produtosDisponiveis = Model.Produtos.Where(p => p.IsDisponivel).ToList();
+					if (produtosDisponiveis.Any()) {
+						foreach (var produto in produtosDisponiveis) {
+
+							<partial name="_ListagemProdutos" for="@produto" />
+						}
+					} else {
+						<p>Nenhum produto disponível no momento.</p>
+					}
+				}
+			</div><!-- End .featured-proucts -->
+		
+		</div>
+	} else {
+		<div class="pesquisa-sem-resultado">
+			<div class="pb-2 title-destaq col">
+				<h2>Resultado da Pesquisa: </h2>
+			</div>
+			<div>
+				<p>Nenhum resultado foi encontrado para a sua pesquisa. Por favor, tente novamente.</p>
+			</div>
+		</div>
+	}
+</div>

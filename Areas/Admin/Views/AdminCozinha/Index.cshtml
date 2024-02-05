@@ -1,0 +1,88 @@
+﻿@model ReflectionIT.Mvc.Paging.PagingList<MasterBurger.Models.Encomenda>
+
+@{
+	ViewData["Title"] = "Encomendas Cozinha";
+}
+
+<div class="card card-body my-3">
+	<div class="d-flex justify-content-between px-4">
+		<div class="col-8">
+		<form asp-action="Index" method="get">
+			<label for="filter">Filtrar por Status:</label>
+			<select name="filter" id="filter">
+				<option value="">Todos</option>
+				<option value="Em Preparo" selected="@((string)ViewData["CurrentFilter"] == "Em Preparo")">Em Preparo</option>
+				<option value="Pronto para Entrega" selected="@((string)ViewData["CurrentFilter"] == "Pronto para Entrega")">Pronto para Entrega</option>
+			</select>
+			<button class="btn btn-secondary py-2" type="submit">Filtrar</button>
+		</form>
+		</div>
+
+		@if (User.IsInRole("Cozinha")) {
+			<div class="col-3 d-flex justify-content-end">
+				<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" method="post">
+					<button type="submit" class="nav-link btn btn-link text-dark d-flex"><span class="d-flex "><i class="mdi mdi-logout text-primary"></i>Logout</span></button>
+				</form>
+			</div>
+		}
+	</div>
+</div>
+
+<div class="card">
+	<div class="d-md-flex justify-content-between mb-3">
+		<div class="mb-3 mb-md-0 title-pg">
+			<h2>@ViewData["Title"]</h2>
+		</div>
+	</div>
+
+	<div class="col table-responsive">
+		<table class="table">
+			<thead class="table-light py-1">
+				<tr>
+					<th>Nº</th>
+					<th>Encomenda realizada em</th>
+					<th>Total de Itens</th>
+					<th>Status</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model) {
+					<tr>
+						<td>
+							<p>@Html.DisplayFor(modelItem => item.EncomendaId)</p>
+						</td>
+						<td>
+							<p>@Html.DisplayFor(modelItem => item.EncomendaRealizada)</p>
+						</td>
+						<td class="ps-3">
+							<p>@Html.DisplayFor(modelItem => item.TotalItensEncomenda)</p>
+						</td>
+						<td>
+							@if (item.Status == "Encomenda Recebida") {
+								<p class="badge bg-warning text-dark">@Html.DisplayFor(modelItem => item.Status)</p>
+							} else if (item.Status == "Em Preparo") {
+								<p class="badge bg-secondary">@Html.DisplayFor(modelItem => item.Status)</p>
+							} else if (item.Status == "Pronto para Entrega") {
+								<p class="badge bg-primary">@Html.DisplayFor(modelItem => item.Status)</p>
+							} 
+						</td>
+						<td class="text-end">
+							<a asp-area="Admin" asp-controller="AdminCozinha" asp-action="Details" asp-route-id="@item.EncomendaId" class="btn btn-primary">Ver Detalhe</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+	<div class="mt-5 mb-6 d-flex justify-content-between">
+		<div class="total-navi">
+			Total de Encomendas Cozinha: @Model.TotalRecordCount
+		</div>
+
+		<div>
+			@await Component.InvokeAsync("Pager", new { PagingList = Model, LinkTo = "Index" })
+		</div>
+	</div>
+
+</div>

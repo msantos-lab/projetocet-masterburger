@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model List<IdentityUser>
+
+@{
+	ViewData["Title"] = "Utilizadores";
+}
+<div class="card">
+	<div class="d-md-flex justify-content-between mb-3">
+		<div class="mb-3 mb-md-0 title-pg">
+			<h2>@ViewData["Title"]</h2>
+		</div>
+
+
+		<div>
+			<a asp-action="Create" class="btn btn-primary mb-3">Novo Utilizador</a>
+		</div>
+	</div>
+
+	<table class="table mt-md-4">
+		<thead class="table-light py-1">
+			<tr>
+				<th>Nome</th>
+				<th>Email</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var user in Model) {
+				<tr>
+					<td style="width: 40%">@user.UserName</td>
+					<td style="width: 45%">@user.Email</td>
+					<td class="text-end">
+						<a asp-action="EditUserRoles" asp-route-userId="@user.Id" class="btn btn-primary">Alterar Pefis</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

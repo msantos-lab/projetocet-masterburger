@@ -1,0 +1,46 @@
+﻿@model MasterBurger.Models.Categoria
+
+@{
+  ViewData["Title"] = "Editar Categoria";
+}
+
+<script src="~/js/tinymce.js"></script>
+<div class="card">
+<div class="row title-pg">
+  <h2>@ViewData["Title"]</h2>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <form asp-action="Edit">
+      <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+      <input type="hidden" asp-for="CategoriaId" />
+      <div class="form-group">
+        <label asp-for="CategoriaNome" class="control-label">Nome:</label>
+        <input asp-for="CategoriaNome" class="form-control" />
+        <span asp-validation-for="CategoriaNome" class="text-danger"></span>
+      </div>
+        <div class="form-group">
+          <label asp-for="CategoriaTipo" class="control-label">Tipo:</label>
+          <select asp-for="CategoriaTipo" class="form-control">
+            <option value="hamburgers">Hamburgers</option>
+            <option value="outros">Outros</option>
+          </select>
+          <span asp-validation-for="CategoriaTipo" class="text-danger"></span>
+        </div>
+      <div class="form-group mb-5">
+        <label asp-for="CategoriaDescricao" class="control-label">Descrição:</label>
+        <textarea asp-for="CategoriaDescricao"></textarea>
+        <span asp-validation-for="CategoriaDescricao" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Salvar" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-primary">Voltar</a>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+
+
+

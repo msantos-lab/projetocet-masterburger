@@ -1,0 +1,79 @@
+﻿
+<div class="d-flex align-items-center justify-content-between">
+	<div class="row title-index">
+		<h3 class="mb-0">Vendas Totais</h3>
+	</div>
+
+</div>
+<div id="support-tracker-legend" class="support-tracker-legend"></div>
+<canvas id="vendasTotais"></canvas>
+
+<script>
+  $(function () {
+    function vendasTotaisTracker(data) {
+      var vendasPorMes = {};
+
+      // Processa os dados para agrupar as vendas por mês
+      data.forEach(function (item) {
+        var mes = new Date(item.dataVenda).toLocaleString('default', { month: 'short' });
+
+        if (!vendasPorMes[mes]) {
+          vendasPorMes[mes] = 0;
+        }
+
+        vendasPorMes[mes] += item.valorTotal;
+      });
+
+      // Converte o objeto em arrays para rótulos e valores
+      var labels = Object.keys(vendasPorMes);
+      var valores = labels.map(function (mes) {
+        return vendasPorMes[mes].toFixed(2);
+      });
+
+      var vendasTotaisTrackerData = {
+        labels: labels,
+        datasets: [{
+          label: 'Vendas Totais (€)',
+          data: valores,
+          fill: false,
+          borderColor: '#00b560',
+          backgroundColor: '#00b560',
+          borderWidth: 2,
+        }],
+      };
+
+      var vendasTotaisTrackerOptions = {
+        scales: {
+          x: {
+            type: 'linear',
+            position: 'bottom',
+            title: {
+              display: true,
+              text: 'Período'
+            }
+          },
+          y: {
+            type: 'linear',
+            position: 'left',
+            title: {
+              display: true,
+              text: 'Vendas (€)'
+            }
+          }
+        }
+      };
+
+      if ($("#vendasTotais").length) {
+        var supportTrackerCanvas = $("#vendasTotais").get(0).getContext("2d");
+        var supportTrackerChart = new Chart(supportTrackerCanvas, {
+          type: 'bar',
+          data: vendasTotaisTrackerData,
+          options: vendasTotaisTrackerOptions,
+        });
+      }
+    }
+
+    var vendasTotais = @Html.Raw(Json.Serialize(ViewData["VendasTotais"]));
+    vendasTotaisTracker(vendasTotais);
+  });
+</script>

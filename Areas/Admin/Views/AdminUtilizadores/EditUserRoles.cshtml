@@ -1,0 +1,31 @@
+﻿@using MasterBurger.Areas.Admin.Views.ViewsModels;
+@model EditRolesViewModels
+
+@{
+	ViewData["Title"] = "Editar Perfil Utilizador";
+}
+
+<div class="card">
+	<div class="d-md-flex justify-content-between mb-3">
+		<div class="mb-3 mb-md-0 title-pg">
+			<h2>@ViewData["Title"]</h2>
+		</div>
+	</div>
+
+	<div class="row mt-3 mb-2">
+		<div>
+			<p><b>Email: </b> @Model.UserName</p>
+		</div>
+		<div class="col-md-4 mt-2">
+			<form asp-action="EditarUserRoles" method="post">
+				<input type="hidden" asp-for="UserId" />
+				<div class="form-group d-flex mb-5">
+					<label for="SelectedRoles ">Perfil:  </label>
+					<select asp-for="SelectedRole" asp-items="new SelectList(Model.AllRoles)" class="form-control"></select>
+				</div>
+				<button type="submit" class="btn btn-primary">Salvar</button>
+				<a asp-action="Index" class="btn btn-primary">Voltar</a>
+			</form>
+		</div>
+	</div>
+</div>

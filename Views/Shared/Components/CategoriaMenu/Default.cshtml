@@ -1,0 +1,9 @@
+﻿<li class="novidade">
+	<a href="/Produto/Novidades">Novidades</a>
+</li>
+
+@foreach (var categoria in Model) {
+	<li class="@categoria.CategoriaTipo">
+		<a asp-controller="Produto" asp-action="ListCat" asp-route-categoria="@categoria.CategoriaNome">@categoria.CategoriaNome</a>
+	</li>
+}

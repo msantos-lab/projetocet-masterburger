@@ -1,0 +1,37 @@
+html,
+body {
+  height: 100%;
+  background: url('/images/bg_esquerda_system.png') left, url('/images/bg_direita_system.png') right;
+  background-size: auto, auto;
+  background-repeat: repeat-y, repeat-y;
+  background-color: #fafaf3;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 1rem;
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+
+.form-system {
+  border: 1px solid #efefef;
+  padding: 30px 25px;
+  border-radius: 5px;
+  background-color: #fff;
+}

@@ -1,0 +1,67 @@
+﻿@model Produto
+
+<div class="col-6 col-sm-4 col-md-3 col-xl-5col">
+	<div class="product-default inner-quickview inner-icon">
+		<figure>
+			<a href="/Produto/Details?ProdutoId=@Model.ProdutoId">
+				@{
+					byte[] valorSemImg = new byte[] { 0xD3, 0x1D, 0xC0 };
+				}
+
+				@if (Model.ImagemBase64 != null && Model.ImagemBase64.SequenceEqual(valorSemImg)) {
+
+					bool produtoSemImg = true;
+					for (int i = 0; i < valorSemImg.Length; i++) {
+						if (@Model.ImagemBase64[i] != valorSemImg[i]) {
+							produtoSemImg = false;
+							break;
+						}
+					}
+
+					if (produtoSemImg) {
+						<img src="~/images/default.png" alt="@Model.Nome">
+					}
+				} else {
+					<img src="data:image/jpeg;base64, @Convert.ToBase64String(@Model.ImagemBase64)" alt="@Model.Nome" width="200">
+				}
+			</a>
+
+
+		</figure>
+		<div class="product-details">
+			<div class="category-wrap">
+				<div class="category-list">
+					<a href="https://localhost:7178/Produto/ListCat/@Model.CategoriaNome" class="product-category">@Model.CategoriaNome</a>
+				</div>
+
+			</div>
+			<h2 class="product-title">
+				<a href="/Produto/Details?ProdutoId=@Model.ProdutoId">@Model.Nome</a>
+			</h2>
+			<div class="ratings-container">
+				<div class="product-ratings">
+					@{
+						var ratingWidth = Model.Reviews?.Any() == true ? Model.Reviews.Average(r => r.Avaliacao) * 20 : 0;
+					}
+					<span class="ratings" style="width:@ratingWidth%"></span>
+				</div><!-- End .product-ratings -->
+			</div><!-- End .product-container -->
+			<div class="price-box">
+				@if (Model.PrecoAnterior > 0) {
+					<span class="old-price">@Model.PrecoAnterior.ToString("c")</span>
+					<span class="product-price">@Model.Preco.ToString("c")</span>
+				} else {
+					<span class="product-price">@Model.Preco.ToString("c")</span>
+				}
+			</div><!-- End .price-box -->
+			<div class="desc-box">
+				<a href="/Produto/Details?ProdutoId=@Model.ProdutoId">@Html.Raw(Model.DescricaoCurta)</a>
+			</div><!-- End .desc-box -->
+			<div class="w-100">
+				<a asp-controller="CarrinhoCompra" asp-action="AdicionarItemNoCarrinhoCompra" asp-route-produtoId="@Model.ProdutoId">
+					<span class="d-flex btn-buy btn btn-primary w-100 d-flex justify-content-center"><img src="~/images/icons/icon-btn.png" height="16"> Comprar</span>
+				</a>
+			</div>
+		</div><!-- End .product-details -->
+	</div>
+</div><!-- End .col-xl-2 -->

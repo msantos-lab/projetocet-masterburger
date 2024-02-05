@@ -1,0 +1,51 @@
+﻿@page
+@model ExternalLoginsModel
+@{
+	ViewData["Title"] = "Login com Google";
+	Layout = "_CustomerDashboard";
+}
+
+<div class="row">
+	<h3>Login com Google</h3>
+	<p> Contas vinculadas:</p>
+</div>
+
+<partial name="_StatusMessage" for="StatusMessage" />
+@if (Model.CurrentLogins?.Count > 0) {
+<div class="mh">
+		<table class="table">
+			<tbody class="border-white">
+				@foreach (var login in Model.CurrentLogins) {
+					<tr>
+						<td id="@($"login-provider-{login.LoginProvider}")">@login.ProviderDisplayName</td>
+						<td>
+							@if (Model.ShowRemoveButton) {
+								<form id="@($"remove-login-{login.LoginProvider}")" asp-page-handler="RemoveLogin" method="post">
+									<div>
+										<input asp-for="@login.LoginProvider" name="LoginProvider" type="hidden" />
+										<input asp-for="@login.ProviderKey" name="ProviderKey" type="hidden" />
+										<button type="submit" class="btn btn-primary" title="Remover este início de sessão @login.ProviderDisplayName da sua conta">Remover</button>
+									</div>
+								</form>
+							} else {
+								@: &nbsp;
+							}
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+</div>
+}
+@if (Model.OtherLogins?.Count > 0) {
+	<p>Adicionar outro serviço para iniciar sessão.</p>
+	<form id="link-login-form" asp-page-handler="LinkLogin" method="post" class="form-horizontal">
+		<div id="socialLoginList">
+			<p>
+				@foreach (var provider in Model.OtherLogins) {
+					<button id="@($"link-login-button-{provider.Name}")" type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Inicie sessão utilizando o seu @provider.DisplayName account">@provider.DisplayName</button>
+				}
+			</p>
+		</div>
+	</form>
+}

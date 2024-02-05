@@ -1,0 +1,42 @@
+﻿@page
+@using MasterBurger.Areas.Identity.Pages.Account;
+@model LoginAdminModel
+
+@{
+	ViewData["Title"] = "Iniciar Sessão - Dashboard";
+	Layout = "/Areas/Identity/Pages/Account/_Signin.cshtml";
+}
+
+
+@if (ViewData["ErrorMessage"] != null) {
+	<div class="alert alert-danger" role="alert">
+		@Html.Raw(ViewData["ErrorMessage"])
+	</div>
+}
+
+<form id="account" method="post">
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<div class="form-group">
+		<label asp-for="Input.Email" class="form-label"></label>
+		<input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+		<span asp-validation-for="Input.Email" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Input.Password" class="form-label"></label>
+		<input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+		<span asp-validation-for="Input.Password" class="text-danger"></span>
+	</div>
+	<div>
+		<button id="login-submit" type="submit" class="btn btn-primary mb-2">Entrar</button>
+	</div>
+	<div>
+		<p class="mt-2">
+			<a id="forgot-password" style="color: #777" asp-page="./ForgotPassword">Esqueceste-te da tua palavra-passe?</a>
+		</p>
+	</div>
+</form>
+<div>
+	
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

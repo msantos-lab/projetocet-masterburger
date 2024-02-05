@@ -1,0 +1,294 @@
+﻿@model Produto
+
+@{
+	ViewData["Title"] = @Model.Nome;
+}
+
+<div class="cont-detail">
+	<div class="container mt-6">
+		<div class="product-single-container product-single-grid">
+			<div class="row">
+				<div class="col-lg-4 product-single-gallery">
+					<div class="row">
+						<div class="col product-item">
+							<div class="inner">
+								@{
+									byte[] valorSemImg = new byte[] { 0xD3, 0x1D, 0xC0 };
+								}
+
+								@if (Model.ImagemBase64 != null && Model.ImagemBase64.SequenceEqual(valorSemImg)) {
+
+									bool produtoSemImg = true;
+									for (int i = 0; i < valorSemImg.Length; i++) {
+										if (@Model.ImagemBase64[i] != valorSemImg[i]) {
+											produtoSemImg = false;
+											break;
+										}
+									}
+									if (produtoSemImg) {
+										<img src="~/images/default.png" alt="@Model.Nome">
+									}
+								} else {
+									<img src="data:image/jpeg;base64, @Convert.ToBase64String(@Model.ImagemBase64)" alt="@Model.Nome" data-zoom-image="data:image/jpeg;base64, @Convert.ToBase64String(@Model.ImagemBase64)" width="300">
+								}
+
+								<span class="prod-full-screen">
+									<i class="icon-plus"></i>
+								</span>
+							</div>
+						</div><!-- End .col-6 -->
+					</div><!-- End .row -->
+				</div><!-- End .product-single-gallery -->
+
+				<div class="col-lg-4 product-single-details">
+					<div class="category-wrap">
+						<div class="category-detail">
+							<a href="https://localhost:7178/Produto/ListCat/@Model.Categoria.CategoriaNome" class="product-category">@Model.Categoria.CategoriaNome</a>
+						</div>
+					</div>
+					<h1 class="product-title">@Model.Nome</h1>
+					<div class="ratings-container">
+						@{
+							var widthPercentage = Model.Reviews.Any() ? Model.Reviews.Average(r => r.Avaliacao) * 20 : 0;
+						}
+						<div class="product-ratings">
+							<span class="ratings" style="width: @widthPercentage%"></span>
+						</div><!-- End .product-ratings -->
+					</div><!-- End .product-container -->
+
+					<div class="price-box">
+						@if (Model.PrecoAnterior > 0) {
+							<span class="old-price">@Model.PrecoAnterior.ToString("c")</span>
+							<span class="product-price">@Model.Preco.ToString("c")</span>
+						} else {
+							<span class="product-price">@Model.Preco.ToString("c")</span>
+						}
+					</div><!-- End .price-box -->
+
+					<div class="product-desc">
+						@Html.Raw(Model.DescricaoCurta)
+					</div><!-- End .product-desc -->
+					@if (TempData["ErrorMessage"] != null) {
+						<div id="error-message" class="alert alert-danger">
+							@Html.Raw(@TempData["ErrorMessage"])
+						</div>
+					}
+
+
+					<form asp-controller="CarrinhoCompra" asp-action="DetalheAdicionarItemNoCarrinhoCompra" method="post">
+						<div class="product-action d-flex align-items-end">
+							<div class="product-single-qty">
+								<input class="horizontal-quantity form-control" type="text" name="quantidade" />
+							</div><!-- End .product-single-qty -->
+
+							<div>
+								<input type="hidden" name="produtoId" value="@Model.ProdutoId" />
+								<button type="submit" class="btn-buy btn btn-primary d-flex justify-content-center px-6">
+									<span class="d-flex"><img src="~/images/icons/icon-btn.png" height="16"> Comprar</span>
+								</button>
+							</div>
+						</div><!-- End .product-action -->
+					</form>
+
+
+					<hr class="divider mb-1">
+				</div>
+			</div><!-- End .product-single-details -->
+			@if (TempData["AvaliacaoMsg"] != null) {
+				<div class="alert alert-success" style="width: 70%">
+					@TempData["AvaliacaoMsg"]
+				</div>
+			}
+		</div><!-- End .row -->
+		<!--  TABS -->
+		<div class="product-single-tabs">
+			<ul class="nav nav-tabs" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active show" id="product-tab-desc" data-toggle="tab" href="#product-desc-content" role="tab" aria-controls="product-desc-content" aria-selected="false">Descrição</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="product-tab-reviews" data-toggle="tab" href="#product-reviews-content" role="tab" aria-controls="product-reviews-content" aria-selected="false">Avaliações</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane fade active show" id="product-desc-content" role="tabpanel" aria-labelledby="product-tab-desc">
+					<div class="product-desc-content">
+						@Html.Raw(Model.DescricaoDetalhada)
+					</div><!-- End .product-desc-content -->
+				</div><!-- End .tab-pane -->
+
+				<div class="tab-pane fade" id="product-reviews-content" role="tabpanel" aria-labelledby="product-tab-reviews">
+					<div class="product-reviews-content">
+						<div class="row">
+							<div class="col-xl-7">
+								@{
+									var avaliacoesAprovadas = Model.Reviews.Count(r => r.Status == "Aprovada");
+									string avaliacoes = (avaliacoesAprovadas > 1) ? "avaliações" : "avaliação";
+								}
+
+								<h2 class="reviews-title">@avaliacoesAprovadas @avaliacoes para <span class="text-uppercase">@Model.Nome</span></h2>
+
+
+								<ol class="comment-list">
+									@foreach (var review in Model.Reviews.Where(r => r.Status == "Aprovada")) {
+										<li class="comment-container">
+											<div class="comment-box">
+												<div class="ratings-container">
+													<div class="product-ratings">
+														<span class="ratings" style="width:@(review.Avaliacao * 20)%"></span>
+													</div>
+												</div>
+
+												<div class="comment-info mb-1">
+													<h4 class="avatar-name">@review.ClienteNome</h4> - <span class="comment-date">@review.DataCriacao.ToShortDateString()</span>
+												</div>
+
+												<div class="comment-text">
+													<p>@review.Comentario</p>
+												</div>
+											</div>
+										</li>
+									}
+								</ol>
+							</div>
+
+							<div class="col-xl-5">
+								@if (User.Identity.IsAuthenticated) {
+									<div class="add-product-review">
+										<form asp-controller="Produto" asp-action="AdicionarReview" method="post">
+											<h3 class="review-title">Adicionar uma Avaliação</h3>
+
+											<div class="rating-form">
+												<label for="rating">Sua avaliação</label>
+												<span class="rating-stars">
+													<span class="rating-stars">
+														<a class="star-1" href="#">1</a>
+														<a class="star-2" href="#">2</a>
+														<a class="star-3" href="#">3</a>
+														<a class="star-4" href="#">4</a>
+														<a class="star-5" href="#">5</a>
+													</span>
+												</span>
+												<select name="avaliacao" id="rating" required style="display: none;">
+													<option value="">Avalie...</option>
+													<option value="5">Perfeito</option>
+													<option value="4">Bom</option>
+													<option value="3">Médio</option>
+													<option value="2">Ruim</option>
+													<option value="1">Muito ruim</option>
+												</select>
+											</div>
+
+											<div class="form-group">
+												<label>Seu comentário</label>
+												<textarea cols="5" rows="6" class="form-control form-control-sm" name="Comentario" required></textarea>
+											</div>
+
+											<input type="hidden" name="ProdutoId" value="@Model.ProdutoId" />
+
+											<input type="submit" class="btn btn-dark ls-n-15" value="Avaliar">
+										</form>
+									</div>
+
+									<!-- End .add-product-review -->
+								} else {
+									<div class="add-product-review">
+										<h3 class="review-title">
+											Faça login para adicionar uma avaliação.
+										</h3>
+										<a href="/Identity/Account/Login?returnUrl=@Url.Action("Details", "Produto", new { ProdutoId = Model.ProdutoId })">Login</a>
+
+									</div>
+								}
+							</div>
+
+						</div>
+					</div><!-- End .product-reviews-content -->
+				</div><!-- End .tab-pane -->
+			</div><!-- End .tab-content -->
+		</div><!-- End .product-single-tabs -->
+		<!-- Exibição dos produtos relacionados -->
+		@if (Model.ProdutosRelacionados.Count != 0) {
+			<div class="mt-5 prodrelac">
+				<div class="section-title">
+					<h3>Também poderá gostar</h3>
+				</div>
+
+				<div class="row">
+					<div class="products-slider owl-carousel owl-theme nav-outer show-nav-hover nav-image-center" data-owl-options="{
+									'dots': false,
+									'nav': true,
+									'responsive': {
+										'992': {
+											'items': 5
+										}
+									}
+								}">
+						@foreach (var produtoRelacionado in Model.ProdutosRelacionados) {
+							if (produtoRelacionado.IsDisponivel) {
+								<div class="product-default inner-quickview inner-icon">
+									<figure>
+										<a href="/Produto/Details?ProdutoId=@produtoRelacionado.ProdutoId">
+											@{
+												byte[] valorSemImgRela = new byte[] { 0xD3, 0x1D, 0xC0 };
+											}
+
+											@if (Model.ImagemBase64 != null && Model.ImagemBase64.SequenceEqual(valorSemImgRela)) {
+
+												bool produtoSemImg = true;
+												for (int i = 0; i < valorSemImgRela.Length; i++) {
+													if (@produtoRelacionado.ImagemBase64[i] != valorSemImgRela[i]) {
+														produtoSemImg = false;
+														break;
+													}
+												}
+
+												if (produtoSemImg) {
+													<img src="~/images/default.png" alt="@produtoRelacionado.Nome">
+												}
+											} else {
+												<img src="data:image/jpeg;base64, @Convert.ToBase64String(@produtoRelacionado.ImagemBase64)" alt="@produtoRelacionado.Nome" width="200">
+											}
+										</a>
+									</figure>
+									<div class="product-details">
+										</div>
+										<h2 class="product-title">
+											<a href="/Produto/Details?ProdutoId=@produtoRelacionado.ProdutoId">@produtoRelacionado.Nome</a>
+										</h2>
+										<div class="ratings-container">
+											<div class="product-ratings">
+												@{
+													var media = produtoRelacionado.Reviews?.Any() == true ? produtoRelacionado.Reviews.Average(r => r.Avaliacao) * 20 : 0;
+
+												}
+												<span class="ratings" style="width:@media%"></span>
+											
+										</div><!-- End .product-ratings -->
+										</div><!-- End .product-container -->
+										<div class="price-box">
+										@if (produtoRelacionado.PrecoAnterior > 0) {
+												<span class="old-price">@produtoRelacionado.PrecoAnterior.ToString("c")</span>
+												<span class="product-price">@produtoRelacionado.Preco.ToString("c")</span>
+											} else {
+												<span class="product-price">@produtoRelacionado.Preco.ToString("c")</span>
+											}
+										</div><!-- End .price-box -->
+										<div class="desc-box">
+											<a href="/Produto/Details?ProdutoId=@produtoRelacionado.ProdutoId">@Html.Raw(Model.DescricaoCurta)</a>
+										</div><!-- End .desc-box -->
+										<div class="btn-buy btn btn-primary w-100 d-flex justify-content-center">
+											<a asp-controller="CarrinhoCompra" asp-action="AdicionarItemNoCarrinhoCompra" asp-route-produtoId="@produtoRelacionado.ProdutoId">
+												<span class="d-flex"><img src="~/images/icons/icon-btn.png" height="16"> Comprar</span>
+											</a>
+										</div>
+									</div><!-- End .product-details -->							
+							}
+						}
+					</div>
+				</div>
+			</div>
+		}
+
+	</div><!-- End .product-single-container -->
+</div>

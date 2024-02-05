@@ -1,0 +1,111 @@
+﻿@model ReflectionIT.Mvc.Paging.PagingList<MasterBurger.Models.Produto>
+
+@{
+	ViewData["Title"] = "Produtos";
+}
+
+
+<div class="card card-body my-3">
+	<div class="d-flex justify-content-end px-4">
+		<form method="get" class="d-flex">
+			<input name="filter" value="@Model.RouteValue["Filter"]" style="max-width: 100%; width: 250px; border: 1px solid #dee2e6; padding-left: 5px; border-radius: 0.25rem;">
+			<button class="btn btn-secondary d-flex" type="submit">Pesquisar</button>
+		</form>
+	</div>
+</div>
+
+<div class="card">
+	<div class="d-md-flex justify-content-between mb-3">
+		<div class="mb-3 mb-md-0 title-pg">
+			<h2>@ViewData["Title"]</h2>
+		</div>
+
+		<div>
+			<a asp-action="Create" class="btn btn-primary mb-3">Novo Produto</a>
+		</div>
+	</div>
+
+	<div class="table-responsive">
+		<table class="table">
+			<thead class="table-light py-1">
+				<tr>
+					<th>
+						Imagem
+					</th>
+					<th>
+						Nome
+					</th>
+					<th>
+						Preço
+					</th>
+					<th>
+						Home
+					</th>
+					<th>
+						Disponível
+					</th>
+					<th>
+						Categoria
+					</th>
+					<th>
+						Quantidade
+					</th>
+					<th>
+
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model) {
+					<tr>
+						<td>
+							<img src="data:image/jpeg;base64, @Convert.ToBase64String(item.ImagemBase64)" width="100">
+						</td>
+						<td>
+							<p>@Html.DisplayFor(modelItem => item.Nome)</p>
+						</td>
+						<td>
+							<p>@Html.DisplayFor(modelItem => item.Preco) €</p>
+						</td>
+
+						<td>
+							@if (@item.IsDestaque) {
+								<p>Sim</p>
+							} else {
+								<p>Não</p>
+							}
+						</td>
+						<td>
+							@if (@item.IsDisponivel) {
+								<p>Sim</p>
+							} else {
+								<p>Não</p>
+							}
+						</td>
+						<td>
+							<p>@Html.DisplayFor(modelItem => item.Categoria.CategoriaNome)</p>
+						</td>
+						<td>
+							<p>@Html.DisplayFor(modelItem => item.Quantidade)</p>
+						</td>
+						<td class="text-end">
+							<a asp-action="Edit" asp-route-id="@item.ProdutoId" class="btn btn-primary">Editar </a>
+						</td>
+
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+
+	<div class="mt-5 mb-6 d-flex justify-content-between">
+		<div class="total-navi">
+			Total de Produtos : @Model.TotalRecordCount
+		</div>
+
+		<div>
+			<vc:pager paging-list="@Model"></vc:pager>
+		</div>
+
+	</div>
+</div>

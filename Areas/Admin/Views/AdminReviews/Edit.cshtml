@@ -1,0 +1,109 @@
+﻿@model MasterBurger.Models.ProdutoReview
+
+@{
+	ViewData["Title"] = "Moderar Avaliação";
+}
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+	<symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+		<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+	</symbol>
+	<symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+		<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+	</symbol>
+	<symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+		<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+	</symbol>
+</svg>
+
+<div class="card">
+	<div class="d-md-flex justify-content-between mb-3">
+		<div class="mb-3 mb-md-0 title-pg">
+			<h2>@ViewData["Title"]</h2>
+		</div>
+	</div>
+
+	<div class="row flex-column flex-md-row">
+		<div class="col-md-4">
+			<div class="title-detail-encomendas">
+				<h4>Dados da Avaliação:</h4>
+			</div>
+			<div>
+				<p><b>Nome Cliente:</b> @Html.DisplayFor(model => model.ClienteNome)</p>
+				<p><b>Avaliação:</b> @Html.DisplayFor(model => model.Avaliacao)</p>
+				<p><b>Comentário:</b> @Html.DisplayFor(model => model.Comentario)</p>
+				<p><b>Data de Criação:</b> @Html.DisplayFor(model => model.DataCriacao)</p>
+				<p>
+					<b>Status Atual:</b>
+					@if (Model.Status == "Nova") {
+					<span class="badge bg-warning text-dark">@Html.DisplayFor(model => model.Status)</span>
+					} else if (Model.Status == "Reprovada") {
+						<span class="badge bg-danger">
+							@Html.DisplayFor(model => model.Status)
+					</span>
+					} else {
+						<span class="badge bg-success">
+							@Html.DisplayFor(model => model.Status)
+					</span>
+					}
+				</p>
+			</div>
+		</div>
+		<div class="col-md-4 lg-md-5 mt-md-0 mt-5">
+			<div class="title-detail-encomendas">
+				<h4>Alterar Status:</h4>
+			</div>
+			<div>
+				<form asp-action="Edit">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<input type="hidden" asp-for="ReviewId" />
+
+					<div class="form-group">
+						<select asp-for="Status" class="form-control" style="width: 230px;">
+							<option>----</option>
+							<option value="Reprovada">Reprovada - Não exibida no site</option>
+							<option value="Aprovada">Aprovada - Exibida no site</option>
+						</select>
+						<span asp-validation-for="Status" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<input type="submit" value="Salvar" class="btn btn-primary" />
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-4 lg-md-5 mt-md-0 mt-5">
+			<div class="title-detail-encomendas">
+				<h4>Notificação:</h4>
+			</div>
+			<div class="mt-6">
+				<div>
+					@if (Model.StatusNotCliente == true) {
+						<div class="alert alert-success d-flex align-items-center" role="alert">
+							<svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
+							<div>
+								O cliente já foi notificado com o status atual.
+							</div>
+						</div>
+					} else {
+						<div class="alert alert-primary d-flex align-items-center" role="alert">
+							<svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill" /></svg>
+							<div>
+								O cliente ainda não foi notificado.
+							</div>
+						</div>
+					}
+				</div>
+				<div class="form-group">
+					<p>Notificar o cliente por email sobre a alteração do Status:</p>
+					<a asp-action="NotificarCliente" asp-route-id="@Model.ReviewId" class="btn btn-warning">ENVIAR EMAIL</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="form-group">
+			<a asp-action="Index" class="btn btn-primary">Voltar</a>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - MasterBurger</title>
+
+	<!-- Favicon -->
+	<link rel="icon" type="image/x-icon" href="~/images/icons/favicon.ico">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Koulen&family=Manrope:wght@500;700;800&family=Oswald:wght@500&family=Public+Sans&display=swap" rel="stylesheet">
+
+	<!-- Plugins CSS File -->
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css">
+
+	<!-- Main CSS File -->
+	<link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+	<link rel="stylesheet" type="text/css" href="~/vendor/fontawesome-free/css/all.min.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/MasterBurger.styles.css" asp-append-version="true" />
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <header class="header">
+
+      <div class="header-middle">
+        <div class="container">
+          <div class="header-left col-lg-5 pl-0">
+            <button class="mobile-menu-toggler text-primary mr-2" type="button">
+              <i class="icon-menu"></i>
+            </button>
+            <a href="/" class="logo">
+              <img src="~/images/logo.svg" alt="MasterBurger">
+            </a>
+          </div><!-- End .header-left -->
+
+          <partial name="_LoginPartial" />
+        </div>
+      </div>
+
+      <div class="header-bottom sticky-header d-none d-lg-block">
+        <div class="container">
+          <nav class="main-nav w-100 d-flex justify-content-center">
+            <ul class="menu">
+							@await Component.InvokeAsync("CategoriaMenu")
+            </ul>
+          </nav>
+        </div><!-- End .container -->
+      </div><!-- End .header-bottom -->
+    </header><!-- End .header -->
+
+    <main class="main">
+			@RenderBody()
+		</main>
+	</div>
+
+
+	@* MENU MOBILE *@
+	<div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+	<div class="mobile-menu-container">
+		<div class="mobile-menu-wrapper">
+			<span class="mobile-menu-close"><i class="porto-icon-retweet"></i></span>
+			<nav class="mobile-nav">
+				<ul class="mobile-menu">
+					@await Component.InvokeAsync("CategoriaMenu")
+				</ul>
+			</nav>
+
+			<div class="social-icons">
+				<a href="#" class="social-icon" target="_blank"><i class="porto-icon-facebook"></i></a>
+				<a href="#" class="social-icon" target="_blank"><i class="porto-icon-twitter"></i></a>
+				<a href="#" class="social-icon" target="_blank"><i class="porto-icon-instagram"></i></a>
+			</div><!-- End .social-icons -->
+		</div><!-- End .mobile-menu-wrapper -->
+	</div><!-- End .mobile-menu-container -->
+
+	<partial name="_Footer" />
+
+
+	<!-- Plugins JS File -->
+	<script src="~/js/jquery.min.js"></script>
+	<script src="~/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/optional/isotope.pkgd.min.js"></script>
+	<script src="~/js/plugins.min.js"></script>
+
+	<!-- Main JS File -->
+	<script src="~/js/main.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,91 @@
+﻿<div class="row title-index">
+	<h3 class="mb-0">Vendas por Categoria</h3>
+</div>
+<p class="text-secondary mb-4">As 5 categorias com melhor desempenho nos últimos 30 dias.</p>
+<div class="row mt-3">
+	<div class="col-sm-4">
+		<ul class="graphl-legend-rectangle" id="legendContainer">
+		</ul>
+	</div>
+	<div class="col-sm-8 grid-margin">
+		<canvas id="vendasCategorias" width="500" height="300"></canvas>
+	</div>
+</div>
+
+
+<script>
+	var vendasPorCategoriaData = @Html.Raw(Json.Serialize(ViewData["VendasPorCategoria"]));
+
+	(function ($) {
+		'use strict';
+		$(function () {
+			function vendasCategorias(data) {
+				var valores = data.map(item => item.valorTotal);
+				var labels = data.map(item => item.categoria);
+
+				var bestSellersData = {
+					datasets: [{
+						data: valores,
+						backgroundColor: [
+							'#008f4c',
+							'#dc3545',
+							'#0dcaf0',
+							'#ffc107',
+							'#6c757d',
+						],
+						borderColor: [
+							'#008f4c',
+							'#dc3545',
+							'#0dcaf0',
+							'#ffc107',
+							'#6c757d',
+						],
+					}],
+					labels: labels
+				};
+
+				var bestSellersOptions = {
+					responsive: true,
+					cutoutPercentage: 80,
+					legend: {
+						display: false,
+					},
+					animation: {
+						animateScale: true,
+						animateRotate: true
+					},
+					plugins: {
+						datalabels: {
+							display: false,
+							align: 'center',
+							anchor: 'center'
+						}
+					}
+				};
+
+				if ($("#vendasCategorias").length) {
+					var pieChartCanvas = $("#vendasCategorias").get(0).getContext("2d");
+					var pieChart = new Chart(pieChartCanvas, {
+						type: 'doughnut',
+						data: bestSellersData,
+						options: bestSellersOptions
+					});
+
+					// Adiciona as categorias  ao ul
+					var legendContainer = $('#legendContainer');
+					labels.forEach(function (categoria, index) {
+						legendContainer.append('<li><span class="bg-' + obterCor(index) + '"></span>' + categoria + '</li>');
+					});
+				}
+			}
+
+			function obterCor(index) {
+				var cores = ['success', 'danger', 'info', 'warning', 'secondary'];
+				return cores[index % cores.length];
+			}
+
+			// Chamando a função
+			vendasCategorias(vendasPorCategoriaData);
+		});
+	})(jQuery);
+</script>

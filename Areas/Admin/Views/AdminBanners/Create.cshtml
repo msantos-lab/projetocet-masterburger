@@ -1,0 +1,81 @@
+﻿@model BannerViewModel
+
+@{
+	ViewData["Title"] = "Novo Banner";
+}
+<script src="~/js/tinymce.js"></script>
+<div class="card">
+	<div class="row title-pg">
+		<h2>@ViewData["Title"]</h2>
+	</div>
+
+	<div class="row mt-3">
+		<div class="col-md-6">
+			<form asp-action="Create" method="post" enctype="multipart/form-data" asp-controller="AdminBanners" asp-action="ConverterImagem">
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+				<div class="form-group">
+					<label asp-for="TituloPrincipal" class="control-label">
+						Nome <span type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="O nome será usado na tag ALT do HTML">
+							(alt)
+						</span>:
+					</label>
+					<input asp-for="TituloPrincipal" class="form-control" />
+					<span asp-validation-for="TituloPrincipal" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="Link" class="control-label">Link (sem https://):</label>
+					<input asp-for="Link" class="form-control" />
+					<span asp-validation-for="Link" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="Comportamento" class="control-label">Comportamento do link:</label>
+					<select asp-for="Comportamento" class="form-control">
+						<option value="">Selecione um comportamento</option>
+						<option value="_self">Abrir na mesma página</option>
+						<option value="_blank">Abrir em outra página</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<input asp-for="BannerBase64" class="form-control" value="0x3A" hidden />
+					<span asp-validation-for="BannerBase64" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label asp-for="ImagemBanner">Banner:</label>
+					<input type="file" name="ImagemBanner" class="form-control" />
+					<span asp-validation-for="ImagemBanner" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label asp-for="Posicao" class="control-label">Posição:</label>
+					<select asp-for="Posicao" class="form-control">
+						<option value="">Selecione uma posição</option>
+						<option value="slider">Slide Principal (1920 x 500px)</option>
+						<option value="halfbanner1">Halfbanner Esquerda (655 x 445px)</option>
+						<option value="halfbanner2">Halfbanner Direita (655 x 445px)</option>
+						<option value="banner">Banner (1340 x 520px)</option>
+					</select>
+				</div>
+
+				<button class="btn btn-secondary mb-5" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+					Exibir Editor de conteúdo do Slide Principal
+				</button>
+
+				<div class="collapse" id="collapseExample">
+					<div class="card card-body">
+				<div class="form-group">
+					<label asp-for="Conteudo" class="control-label">Conteúdo do Slide:</label>
+					<textarea asp-for="Conteudo"></textarea>
+					<span asp-validation-for="Conteudo" class="text-danger"></span>
+				</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<input type="submit" value="Salvar" class="btn btn-primary" />
+					<a asp-action="Index" class="btn btn-primary">Voltar</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

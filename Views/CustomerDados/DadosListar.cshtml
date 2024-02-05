@@ -1,0 +1,40 @@
+﻿@model IList<DadosUtilizador> 
+@{
+  ViewData["Title"] = "Dados Pessoais";
+  Layout = "_CustomerDashboard";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<div class="mh">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Apelido</th>
+        <th>NIF</th>
+        <th>Morada</th>
+        <th>Localidade</th>
+        <th>Código Postal</th>
+        <th>Telemóvel</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var morada in Model) {
+        <tr class="align-middle">
+          <td>@morada.Nome</td>
+          <td>@morada.Apelido</td>
+          <td>@morada.NIF</td>
+          <td>@morada.Morada</td>
+          <td>@morada.Localidade</td>
+          <td>@morada.CodigoPostal</td>
+          <td>@morada.Telemovel</td>
+          <td>
+            <a asp-controller="CustomerDados" asp-action="DadosEditar" asp-route-id="@morada.DadosUtilizadorId" class="btn btn-primary">Editar</a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

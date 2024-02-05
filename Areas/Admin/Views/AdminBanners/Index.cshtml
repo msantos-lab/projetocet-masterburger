@@ -1,0 +1,69 @@
+﻿@model IEnumerable<MasterBurger.Models.Banner>
+
+@{
+	ViewData["Title"] = "Banners";
+}
+
+<div class="card">
+	<div class="d-md-flex justify-content-between mb-3">
+		<div class="mb-3 mb-md-0 title-pg">
+			<h2>@ViewData["Title"]</h2>
+		</div>
+
+		<div>
+			<a asp-action="Create" class="btn btn-primary mb-3">Novo Banner</a>
+		</div>
+	</div>
+
+	<div class="table-responsive">
+		<table class="table mt-md-4">
+			<thead class="table-light py-1">
+				<tr>
+					<th>
+						Nome <span type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="O nome será usado na tag ALT do HTML">
+							(alt)
+						</span>
+					</th>
+					<th>
+						Imagem
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Link)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Comportamento)
+					</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model) {
+					<tr>
+						<td>
+							<p>@Html.DisplayFor(modelItem => item.TituloPrincipal)</p>
+						</td>
+						<td>
+							<img src="data:image/jpeg;base64, @Convert.ToBase64String(item.BannerBase64)" alt="Banner" width="210">
+						</td>
+						<td>
+							<p>@Html.DisplayFor(modelItem => item.Link)</p>
+						</td>
+
+						@if (item.Comportamento == "_self") {
+							<td><p>Abrir na mesma página</p></td>
+						} else {
+							<td><p>Abrir em outra página</p></td>
+						}
+
+						<td class="text-end">
+							<div class="d-flex gap-2 justify-content-end">
+								<a asp-action="Edit" asp-route-id="@item.BannerId" class="btn btn-primary">Editar</a>
+								<a asp-action="Delete" asp-route-id="@item.BannerId" class="btn btn-primary">Excluir</a>
+						</div>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

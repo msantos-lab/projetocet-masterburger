@@ -1,0 +1,59 @@
+﻿@page
+@model ExternalLoginModel
+@{
+	ViewData["Title"] = "Registar com Google";
+}
+
+<div class="container mt-6">
+  <div class="row">
+    <div class="d-flex justify-content-center text-uppercase">
+      <h2>@ViewData["Title"]</h2>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <div class="row">
+        @if (ViewData["Status"] == "Success") {
+          <p id="external-login-description" class="text-dark mb-3 mt-2">
+            Autenticação bem sucedida.<br />
+            Insira o email e clique no botão Registar para concluir
+            o login com a sua conta <strong>@Model.ProviderDisplayName</strong>.
+          </p>
+          <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+              <label asp-for="Input.Email" class="form-label"></label>
+              <input asp-for="Input.Email" class="form-control" autocomplete="email" />
+
+              <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Registar</button>
+          </form>
+        } else if (ViewData["Status"] == "PendingConfirmation") {
+          <p id="external-login-description" class="text-dark mb-3 mt-2">
+            Email já registado, mas com a confirmação pendente.
+          </p>
+          <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+              <label asp-for="Input.Email" class="form-label"></label>
+              <input asp-for="Input.Email" class="form-control" autocomplete="email" />
+
+              <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+          </form>
+        } else if (ViewData["Status"] == "EmailAlreadyRegistered") {
+          <p id="external-login-description" class="text-dark mb-3 mt-2">
+            Email '@Model.Input.Email' já registado.
+          </p>
+        }
+      </div>
+
+
+    </div>
+  </div>
+</div>
+@section Scripts {
+  <partial name="_ValidationScriptsPartial" />
+}

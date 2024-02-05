@@ -1,0 +1,62 @@
+﻿
+<div class="row title-index">
+	<h3 class="mb-0">Produtos Mais Vendidos</h3>
+</div>
+<p class="text-secondary mb-3">Os 5 produtos mais populares nos últimos 30 dias</p>
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="progress progress-lg grouped mb-2" id="produtosMaisVendidosProgress">
+		</div>
+	</div>
+	<div class="col-sm-12">
+		<ul class="graphl-legend-rectangle" id="produtosMaisVendidosLegend">
+		</ul>
+	</div>
+</div>
+
+
+<script>
+	$(document).ready(function () {
+		var produtosMaisVendidos = @Html.Raw(Json.Serialize(ViewData["ProdutosMaisVendidos"]));
+
+		function criarProdutosMaisVendidosChart(data) {
+			var progressContainer = $('#produtosMaisVendidosProgress');
+			var legendContainer = $('#produtosMaisVendidosLegend');
+
+			// Limpa conteúdo existente
+			progressContainer.empty();
+			legendContainer.empty();
+
+			data.forEach(function (item) {
+				item.quantidadeVendida = parseFloat(item.quantidadeVendida);
+			});
+
+			var totalQuantidadeVendida = data.reduce(function (total, item) {
+				return total + item.quantidadeVendida;
+			}, 0);
+
+			// Adiciona barras de progresso e legendas
+			data.forEach(function (item, index) {
+				var progressValue = (item.quantidadeVendida / totalQuantidadeVendida) * 100;
+
+				//barra de progresso
+				progressContainer.append('<div class="progress-bar bg-' + obterCor(index) + '" role="progressbar" style="width: ' + progressValue + '%" aria-valuenow="' + progressValue + '" aria-valuemin="0" aria-valuemax="100"></div>');
+
+				//egenda
+				legendContainer.append('<li><span class="bg-' + obterCor(index) + '"></span>' + item.nomeProduto + ' (' + Math.round(progressValue) + '%)</li>');
+			});
+		}
+
+		// Função auxiliar para obter cores com base no índice
+		function obterCor(index) {
+			var cores = ['danger', 'info', 'warning', 'success'];
+			return cores[index % cores.length];
+		}
+
+		criarProdutosMaisVendidosChart(produtosMaisVendidos);
+	});
+</script>
+
+
+

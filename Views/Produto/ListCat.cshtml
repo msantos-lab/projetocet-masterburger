@@ -1,0 +1,112 @@
+﻿@model ProdutoListViewModel
+
+@{
+	ViewData["Title"] = @Model.CategoriaAtual;
+}
+
+
+<div class="category-banner-container mb-3">
+	<div class="category-banner banner">
+		<div class="container position-relative">
+			<div class="row">
+				<div class="pl-lg-5 pb-5 pb-md-0 col-md-5 col-xl-4 col-lg-4">
+					<h3 class="ml-lg-5 mb-2 ls-10 text-uppercase">@Model.CategoriaAtual</h3>
+				</div>
+				<div class="pl-lg-6 col-md-5 offset-md-0 offset-1">
+					<div>
+						@Html.Raw(Model.CategoriaAtualDescricao)
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<nav class="toolbox">
+		<div class="toolbox-left">
+			<div class="toolbox-item toolbox-sort">
+			</div><!-- End .toolbox-item -->
+		</div><!-- End .toolbox-left -->
+
+		<div class="toolbox-right">
+			<div class="toolbox-item toolbox-show">
+				<div class="select-custom">
+					<form asp-controller="Produto" asp-action="ListCat" method="get">
+						<div class="form-group">
+							<select name="order" class="form-control" onchange="this.form.submit()">
+								<option value="menu_order">Ordenar por</option>
+								<option value="ordenaraz">A-Z</option>
+								<option value="ordenarza">Z-A</option>
+								<option value="preco-asc">Preço (mais baixo)</option>
+								<option value="preco-desc">Preço (mais alto)</option>
+							</select>
+						</div>
+					</form>
+				</div><!-- End .select-custom --><!-- End .select-custom -->
+			</div><!-- End .toolbox-item -->
+
+			<div class="toolbox-item layout-modes">
+			</div><!-- End .layout-modes -->
+		</div><!-- End .toolbox-right -->
+	</nav>
+
+	<div class="row" id="productsContainer">
+		@foreach (var produto in Model.Produtos.Where(p => p.IsDisponivel)) {
+			<partial name="_ListagemProdutos" for="@produto" />
+		}
+	</div>
+
+	
+	<div class="row mt-4">
+		<div class="col">
+			<nav aria-label="Page navigation">
+				<ul class="pagination justify-content-center" id="paginacao">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+
+
+<script>
+	var products = document.querySelectorAll('.product-destaque');
+	var productsPerPage = 18;
+	var currentPage = 1;
+
+	function showPage(page) {
+		var startIndex = (page - 1) * productsPerPage;
+		var endIndex = page * productsPerPage;
+
+		products.forEach(function (product, index) {
+			if (index >= startIndex && index < endIndex) {
+				product.style.display = 'block';
+			} else {
+				product.style.display = 'none';
+			}
+		});
+	}
+
+	function updatePagination() {
+		var totalProducts = products.length;
+		var totalPages = Math.ceil(totalProducts / productsPerPage);
+
+		var pagination = document.getElementById('paginacao');
+		pagination.innerHTML = '';
+
+		for (var i = 1; i <= totalPages; i++) {
+			var li = document.createElement('li');
+			li.innerHTML = `<a class="page-link" href="#" data-page="${i}">${i}</a>`;
+			pagination.appendChild(li);
+
+			li.addEventListener('click', function () {
+				var page = parseInt(this.querySelector('a').getAttribute('data-page'));
+				currentPage = page;
+				showPage(currentPage);
+			});
+		}
+	}
+	showPage(currentPage);
+	updatePagination();
+</script>

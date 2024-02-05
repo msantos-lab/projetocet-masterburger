@@ -1,0 +1,11 @@
+﻿@model CarrinhoCompraViewModel
+
+@if (Model.CarrinhoCompra.CarrinhoCompraItems.Count > 0) {
+	<span class="cart-count badge-circle">
+		@Model.CarrinhoCompra.CarrinhoCompraItems.Count
+	</span>
+} else {
+	<span class="cart-count badge-circle">
+			0
+	</span>
+}

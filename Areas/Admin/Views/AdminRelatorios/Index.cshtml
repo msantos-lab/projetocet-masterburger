@@ -1,0 +1,175 @@
+﻿@model RelatoriosViewModel
+
+@{
+	ViewData["Title"] = "Relatórios";
+}
+
+
+<div class="card card-body my-3">
+	<div class="row p-3 justify-content-between">
+		<div class="d-md-flex justify-content-between mb-3">
+			<div class="mb-3 mb-md-0 title-pg">
+				<h2>@ViewData["Title"]</h2>
+			</div>
+		</div>
+		<form asp-controller="AdminRelatorios" asp-action="Index" method="get">
+			<div class="d-flex gap-4">
+				<div class="mt-2">
+					<label asp-for="DataInicio"><p>@Html.DisplayNameFor(model => model.DataInicio)</p></label>
+					<input asp-for="DataInicio" type="date" id="DataInicio" required>
+				</div>
+				<div class="mt-2">
+					<p>-</p>
+			</div>
+				<div class="mt-2">
+					<label asp-for="DataFim"><p>@Html.DisplayNameFor(model => model.DataFim)</p></label>
+					<input asp-for="DataFim" type="date" id="DataFim" required>
+				</div>
+			</div>
+
+			<div class="mt-2">
+				<label asp-for="RelatorioSelecionado"><p>@Html.DisplayNameFor(model => model.RelatorioSelecionado):</p></label>
+				<select asp-for="RelatorioSelecionado" id="RelatSelecionado" asp-items='new SelectList(new[] { "Vendas Totais", "Vendas Por Categoria", "Produtos Mais Vendidos" })'></select>
+			</div>
+
+			<button class="btn btn-primary py-2 mt-3" type="submit">Aplicar Filtros</button>
+		</form>
+
+		<div class="mt-5">
+			<button class="btn btn-secondary py-2" onclick="exportarParaExcel()">Exportar para Excel</button>
+			<button class="btn btn-secondary py-2" onclick="exportarParaXml()">Exportar para XML</button>
+			<button class="btn btn-secondary py-2" onclick="exportarParaPdf()">Exportar para PDF</button>
+		</div>
+	</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const dataInicioElement = document.getElementById("DataInicio");
+    const dataFimElement = document.getElementById("DataFim");
+    const relatorioSelecionadoElement = document.getElementById("RelatSelecionado");
+
+    // Preencher os campos de data
+    if (dataInicioElement && dataFimElement) {
+      dataInicioElement.value = new URLSearchParams(window.location.search).get("DataInicio");
+      dataFimElement.value = new URLSearchParams(window.location.search).get("DataFim");
+    }
+
+    // Preencher o menu suspenso
+    if (relatorioSelecionadoElement) {
+      const relatorioSelecionado = new URLSearchParams(window.location.search).get("RelatorioSelecionado");
+      if (relatorioSelecionado) {
+        relatorioSelecionadoElement.value = relatorioSelecionado;
+      }
+    }
+
+    // Adicionar evento de envio ao formulário
+    const formElement = document.querySelector("form");
+    if (formElement) {
+      formElement.addEventListener("submit", function () {
+        const dataInicio = dataInicioElement.value;
+        const dataFim = dataFimElement.value;
+        const relatorioSelecionado = relatorioSelecionadoElement.value;
+
+        // Atualizar a URL com os parâmetros do formulário
+        const newUrl = `https://localhost:7178/Admin/Relatorios?DataInicio=${dataInicio}&DataFim=${dataFim}&RelatorioSelecionado=${relatorioSelecionado}`;
+        history.pushState({}, "", newUrl);
+      });
+    }
+  });
+
+  function exportarParaPdf() {
+    exportar("pdf");
+  }
+
+  function exportarParaExcel() {
+    exportar("excel");
+  }
+
+  function exportarParaXml() {
+    exportar("xml");
+  }
+
+  function exportar(formato) {
+    const dataInicio = new Date(document.getElementById("DataInicio").value);
+    const dataFim = new Date(document.getElementById("DataFim").value);
+    const relatorioSelecionado = document.getElementById("RelatSelecionado").value;
+
+    const nomeFicheiro = `${dataInicio.toLocaleDateString('pt-PT')}-${dataFim.toLocaleDateString('pt-PT')}_${relatorioSelecionado}.${formato}`;
+
+    const dadosRelatorio = obterDadosRelatorio(relatorioSelecionado);
+
+    switch (formato) {
+      case "pdf":
+        var pdf = new jsPDF({
+          orientation: 'landscape'
+        });
+        pdf.text(`Relatório ${relatorioSelecionado} - MasterBurger`, 10, 10);
+        pdf.setFontSize(11);
+        dadosRelatorio.forEach((item, index) => {
+          let formattedItem = `${index + 1}.`;
+          switch (relatorioSelecionado) {
+            case "Vendas Totais":
+              formattedItem += ` EncomendaID: ${item.encomendaId} - Data Venda: ${item.dataVenda} - Produto: ${item.nomeProduto} - Quantidade: ${item.quantidade} - Preço Unitário: ${item.precoUnitario} - Valor Total: ${item.valorTotalVendido} € `;
+              break;
+            case "Produtos Mais Vendidos":
+              formattedItem += ` Produto: ${item.nomeProduto} - Quantidade Vendida: ${item.quantidadeVendida}`;
+              break;
+            case "Vendas Por Categoria":
+              formattedItem += ` Categoria: ${item.categoria} - Valor Total: ${item.valorTotal} €`;
+              break;
+            default:
+              formattedItem += " Tipo de relatório não suportado";
+          }
+          pdf.text(formattedItem, 10, 20 + index * 10);
+        });
+        pdf.save(nomeFicheiro);
+        break;
+
+      case "excel":
+        var wb = XLSX.utils.book_new();
+        var ws = XLSX.utils.json_to_sheet(dadosRelatorio);
+        XLSX.utils.book_append_sheet(wb, ws, "Relatorio");
+
+        var novoNomeFicheiro = nomeFicheiro.replace(".excel", ".xls");
+
+        XLSX.writeFile(wb, novoNomeFicheiro, { bookType: 'biff2' });
+        break;
+
+
+      case "xml":
+        var xmlData = '<root>';
+        dadosRelatorio.forEach((item, index) => {
+          xmlData += `<item>${JSON.stringify(item)}</item>`;
+        });
+        xmlData += '</root>';
+        var blob = new Blob([xmlData], { type: 'application/xml' });
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = nomeFicheiro;
+        link.click();
+        break;
+
+      default:
+        console.error("Formato de exportação não suportado");
+    }
+  }
+
+  function obterDadosRelatorio(relatorioSelecionado) {
+    switch (relatorioSelecionado) {
+      case "Vendas Totais":
+        return JSON.parse('@Html.Raw(Json.Serialize(Model.DadosRelatorio))');
+      case "Vendas Por Categoria":
+        return JSON.parse('@Html.Raw(Json.Serialize(Model.DadosRelatorio))');
+      case "Produtos Mais Vendidos":
+        return JSON.parse('@Html.Raw(Json.Serialize(Model.DadosRelatorio))');
+      default:
+        return [];
+    }
+  }
+</script>
+
+

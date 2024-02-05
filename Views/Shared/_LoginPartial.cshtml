@@ -1,0 +1,99 @@
+﻿@using MasterBurger.Services;
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject UtilizadorService UtilizadorService
+
+
+<div class="header-right d-flex justify-content-md-end">
+  @if (User.IsInRole("Cliente")) {
+    var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+    if (userIdClaim != null) {
+      var userId = userIdClaim.Value;
+      var nomeDoUsuario = await UtilizadorService.GetNomeAsync(User, userId);
+
+      <div class="d-flex me-5 align-items-center">
+        <div class="d-flex align-items-center login-register flex-column user-icon me-3">
+          <a asp-controller="CustomerDashboard" asp-action="Index" title="A Minha Conta">
+            <i class="icon-user-2"></i>
+          </a>
+        </div>
+
+
+        <div class="dropdown cart-dropdown px-2">
+          <a asp-controller="CustomerDashboard" asp-action="Index" title="A Minha Conta" class="dropdown-toggle dropdown-arrow d-flex" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+            <span> Olá, @nomeDoUsuario</span>
+          </a>
+
+          <div class="dropdown-menu">
+            <div class="dropdownmenu-wrapper text-dark">
+              <form class="form-inline m-0" asp-area="Identity" asp-page="/Account/Logout" method="post">
+                <button type="submit" class="nav-link btn btn-link">
+                  <span class="d-flex">
+                    <img src="~/images/icons/logout.png" class="me-2 d-inline p-0" width="20" height="20" />
+                    Logout
+                  </span>
+                </button>
+              </form>
+            </div><!-- End .dropdownmenu-wrapper -->
+          </div><!-- End .dropdown-menu -->
+        </div><!-- End .dropdown -->
+
+
+      </div>
+    }
+  } else if (User.IsInRole("Admin")) {
+    var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+    if (userIdClaim != null) {
+      var userId = userIdClaim.Value;
+      var nomeDoUsuario = await UtilizadorService.GetNomeAsync(User, userId);
+
+      <div class="d-flex me-5 align-items-center">
+        <div class="d-flex align-items-center login-register flex-column user-icon me-3">
+          <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" title="Dashboard Admin">
+            <i class="icon-user-2"></i>
+          </a>
+        </div>
+
+
+        <div class="dropdown cart-dropdown px-2">
+          <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" title="Dashboard Admin" class="dropdown-toggle dropdown-arrow d-flex" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+            <span> Olá, @nomeDoUsuario</span>
+          </a>
+
+          <div class="dropdown-menu">
+            <div class="dropdownmenu-wrapper text-dark">
+              <form class="form-inline m-0" asp-area="Identity" asp-page="/Account/Logout" method="post">
+                <button type="submit" class="nav-link btn btn-link">
+                  <span class="d-flex">
+                    <img src="~/images/icons/logout.png" class="me-2 d-inline p-0" width="20" height="20" />
+                    Logout
+                  </span>
+                </button>
+              </form>
+            </div><!-- End .dropdownmenu-wrapper -->
+          </div><!-- End .dropdown-menu -->
+        </div><!-- End .dropdown -->
+      </div>
+    }
+  } else {
+    <div class="d-flex me-5">
+      <a asp-area="Identity" asp-page="/Account/Login" title="A Minha Conta" class="header-icon user-icon">
+        <i class="icon-user-2"></i>
+      </a>
+      <div class="d-flex align-items-center login-register">
+        <a asp-area="Identity" asp-page="/Account/Login">Login</a> <span>/</span><a asp-area="Identity" asp-page="/Account/Register">Registar</a>
+      </div>
+    </div>
+  }
+
+  <div class="d-flex mx-2">
+    <a asp-controller="CarrinhoCompra" asp-action="Index" class="d-flex">
+      <img src="~/images/icons/motocicleta.png" alt="Entrega MasterBurger" width="30">
+      <div class="d-flex me-2">
+        @await Component.InvokeAsync("CarrinhoCompraResumo")
+      </div>
+    </a>
+  </div><!-- End .cart -->
+</div>

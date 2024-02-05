@@ -1,0 +1,46 @@
+﻿@model IEnumerable<MasterBurger.Models.Categoria>
+
+@{
+	ViewData["Title"] = "Categorias";
+}
+
+<div class="card">
+	<div class="d-md-flex justify-content-between mb-3">
+		<div class="mb-3 mb-md-0 title-pg">
+			<h2>@ViewData["Title"]</h2>
+		</div>
+
+		<div>
+			<a asp-action="Create" class="btn btn-primary mb-3">Nova Categoria</a>
+		</div>
+	</div>
+
+	<div class="table-responsive">
+		<table class="table mt-md-4">
+			<thead class="table-light py-1">
+				<tr>
+					<th>
+						@Html.DisplayNameFor(model => model.CategoriaNome)
+					</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model) {
+					<tr>
+						<td class="col-7">
+							@Html.DisplayFor(modelItem => item.CategoriaNome)
+						</td>
+
+						<td class="text-end">
+							<div class="d-flex gap-2 justify-content-end">
+								<a asp-action="Edit" asp-route-id="@item.CategoriaId" class="btn btn-primary">Editar</a>
+								<a asp-action="Delete" asp-route-id="@item.CategoriaId" class="btn btn-primary">Excluir</a>
+							</div>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

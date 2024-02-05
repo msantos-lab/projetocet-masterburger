@@ -1,0 +1,72 @@
+﻿@model IEnumerable<MasterBurger.Models.Cupom>
+
+@{
+	ViewData["Title"] = "Cupons";
+}
+
+<div class="card">
+	<div class="d-md-flex justify-content-between mb-3">
+		<div class="mb-3 mb-md-0 title-pg">
+			<h2>@ViewData["Title"]</h2>
+		</div>
+
+
+		<div>
+			<a asp-action="Create" class="btn btn-primary mb-3">Novo Cupom</a>
+		</div>
+	</div>
+
+	<div class="table-responsive">
+		<table class="table mt-md-4">
+			<thead class="table-light py-1">
+			<thead>
+				<tr>
+					<th>
+						Código
+					</th>
+					<th>
+						Percentual de Desconto
+					</th>
+					<th>
+							@Html.DisplayNameFor(model => model.Status)
+					</th>
+					<th>
+						Data Início
+					</th>
+					<th>
+						Data Fim
+					</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+					@foreach (var item in Model) {
+					<tr>
+						<td>
+							<p>@Html.DisplayFor(modelItem => item.Codigo)</p>
+						</td>
+						<td>
+							<p> @Html.DisplayFor(modelItem => item.DescontoPercentual)%</p>
+						</td>
+						<td>
+								@if (item.Status) {
+								<p>Ativo</p>
+								} else {
+								<p>Expirado</p>
+								}
+						</td>
+						<td>
+							<p>	@Html.DisplayFor(modelItem => item.DataInicio)</p>
+						</td>
+						<td>
+							<p>@Html.DisplayFor(modelItem => item.DataFim)</p>
+						</td>
+						<td class="text-end">
+							<a asp-action="Edit" asp-route-id="@item.CupomId" class="btn btn-primary">Ver Detalhe</a>
+						</td>
+					</tr>
+					}
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -1,0 +1,29 @@
+﻿@model MasterBurger.Models.Categoria
+
+@{
+	ViewData["Title"] = "Excluir";
+}
+
+
+<div class="card">
+	<h3>Deseja excluir esta categoria?</h3>
+	<div>
+
+		<dl class="row mb-4 mt-3">
+			<dt class="col-sm-4" style="width: 10%">
+				@Html.DisplayNameFor(model => model.CategoriaNome):
+			</dt>
+			<dd class="col-sm-8">
+				<p>@Html.DisplayFor(model => model.CategoriaNome)</p>
+			</dd>
+		</dl>
+		<p>@ViewData["mensagem"]</p>
+
+		<form asp-action="Delete">
+			<input type="hidden" asp-for="CategoriaId" />
+			<input type="submit" value="EXCLUIR" class="btn btn-danger" />
+			<a asp-action="Index" class="btn btn-primary">Voltar</a>
+
+		</form>
+	</div>
+</div>

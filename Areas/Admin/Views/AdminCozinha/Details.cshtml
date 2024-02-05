@@ -1,0 +1,91 @@
+﻿@model MasterBurger.Models.Encomenda;
+
+
+@{
+	ViewData["Title"] = "Detalhe da Encomenda  - Nº " + @Model.EncomendaId;
+}
+
+<div class="card">
+	<div class="d-md-flex justify-content-between mb-3">
+		<div class="mb-3 mb-md-0 title-pg">
+			<h2>@ViewData["Title"]</h2>
+		</div>
+	</div>
+
+	<div class="row flex-column flex-md-row">
+		<div class="col-md-4 lg-md-5 mt-md-0 mt-5">
+			<div class="title-detail-encomendas">
+				<h4>Dados da Encomenda:</h4>
+			</div>
+			<div>
+				<p><b>Data da Encomenda:</b> @Model.EncomendaRealizada</p>
+				<p>
+					<b>Status Atual:</b>
+					@if (Model.Status == "Encomenda Recebida") {
+						<span class="badge bg-warning text-dark">@Html.DisplayFor(modelItem => Model.Status)</span>
+					} else if (Model.Status == "Em Preparo") {
+						<span class="badge bg-secondary">@Html.DisplayFor(modelItem => Model.Status)</span>
+					} else if (Model.Status == "Pronto para Entrega") {
+						<span class="badge bg-primary">@Html.DisplayFor(modelItem => Model.Status)</span>
+					}
+				</p>
+			</div>
+		</div>
+		<div class="col-md-4 lg-md-5 mt-md-0 mt-5">
+			<div class="title-detail-encomendas">
+				<h4>Alterar Status da Encomenda:</h4>
+			</div>
+			<div class="mt-6">
+				@if (@Model.EncomendaConcluida == null) {
+					<form method="post" asp-action="AlterarStatusEncomenda" asp-route-id="@Model.EncomendaId">
+						<div class="form-group" style="width: 230px;">
+							<select name="Status" class="form-control">
+								<option value="">@Model.Status</option>
+								<option value="Em Preparo">Em Preparo</option>
+								<option value="Pronto para Entrega">Pronto para Entrega</option>
+							</select>
+						</div>
+
+						<div class="form-group">
+							<input type="submit" value="Salvar" class="btn btn-primary mt-3 mb-6" />
+						</div>
+					</form>
+				} else {
+					<p>Encomenda concluída </p>
+				}
+			</div>
+		</div>
+	</div>
+
+	<div class="row mt-5">
+		<div class="title-detail-encomendas">
+			<h4>Produtos:</h4>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-bordered">
+				<thead>
+					<tr class="tabela-prod-th">
+						<th>Produto ID</th>
+						<th>Nome</th>
+						<th>Quantidade</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var produto in Model.EncomendaItens) {
+						<tr class="tabela-prod-td">
+							<td>@produto.Produto.ProdutoId</td>
+							<td>@produto.Produto.Nome</td>
+							<td>@produto.Quantidade</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-4">
+		<div class="col-3 mt-4">
+			<a asp-action="Index" class="btn btn-primary">Voltar</a>
+		</div>
+	</div>
+</div>

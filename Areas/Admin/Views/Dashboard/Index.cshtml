@@ -1,0 +1,93 @@
+﻿@model ReflectionIT.Mvc.Paging.PagingList<MasterBurger.Models.Encomenda>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="card card-body my-3">
+	<div class="row p-3 justify-content-between">
+		<div class="col-lg-5 mb-4">
+			<partial name="_VendasTotais" />
+		</div>
+		<div class="col-lg-4 ps-4">
+			<partial name="_VendasPorCategoria" />
+		</div>
+		<div class="col-lg-3">
+			<partial name="_ProdutosMaisVendidos" />
+		</div>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-sm-12 grid-margin d-flex stretch-card">
+		<div class="card card-body my-3">
+			<div class="card-body">
+				<div class="row">
+					<div class="row title-index">
+						<h3>Encomendas Recebidas</h3>
+					</div>
+				</div>
+				<div class="row table-responsive">
+					<table class="table">
+						<thead class="table-light py-1">
+							<tr>
+								<th>Nº </th>
+								<th>Encomenda realizada em	</th>
+								<th>Entregue em</th>
+								<th>Total</th>
+								<th>Status</th>
+
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model) {
+								<tr>
+									<td>
+										<p>@Html.DisplayFor(modelItem => item.EncomendaId)</p>
+									</td>
+									<td>
+										<p>	@Html.DisplayFor(modelItem => item.EncomendaRealizada)</p>
+									</td>
+									<td>
+										@if (item.EncomendaConcluida != null) {
+											<p>@Html.DisplayFor(modelItem => item.EncomendaConcluida)</p>
+										} else {
+											<p class="text-bg-danger ps-2" style="width: 80%">Encomenda não enviada</p>
+										}
+
+									</td>
+									<td>
+										<p>@Html.DisplayFor(modelItem => item.EncomendaTotal) €</p>
+									</td>
+									<td>
+										<p class="badge bg-warning text-dark">@Html.DisplayFor(modelItem => item.Status)<p>
+									</td>
+									<td class="text-end">
+										<a asp-area="Admin" asp-controller="AdminEncomendas" asp-action="Details" asp-route-id="@item.EncomendaId" class="btn btn-primary">Ver Detalhe</a>
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+				<div class="mt-5 mb-6 d-flex justify-content-between">
+					<div class="total-navi">
+						Total de Encomendas Recebidas: @Model.TotalRecordCount
+					</div>
+
+					<div>
+						@await Component.InvokeAsync("Pager", new { PagingList = Model, LinkTo = "Index" })
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+</div>

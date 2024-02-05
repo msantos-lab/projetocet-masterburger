@@ -1,0 +1,253 @@
+.login-register {
+	font-size: 14px;
+	color: #F1F1F1;
+}
+
+
+	.login-register span {
+		padding: 0 4px;
+	}
+
+.btn-buy {
+	width: 220px;
+	/*margin-top: 20px;*/
+}
+
+	.btn-buy a:hover {
+		color: #fff;
+	}
+
+
+.user-icon i {
+	font-size: 28px;
+}
+
+.title-destaq h2 {
+	text-transform: uppercase;
+}
+
+.category-banner {
+	background: url('/images/banners/bg_categoria.png') no-repeat;
+	color: #fff;
+}
+
+	.category-banner h3 {
+		color: #fff;
+	}
+
+.category-banner {
+	font-size: 14px
+}
+
+
+.bootstrap-touchspin input {
+	padding: 20px;
+	width: 150px;
+}
+
+.input-group-btn {
+	display: flex;
+	align-items: center;
+	/*padding: 5px;*/
+}
+
+.category-detail {
+	color: #E59E1D;
+	font-family: 'Koulen', sans-serif;
+	font-size: 1.5rem;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+	text-transform: uppercase;
+}
+
+.main .cont-detail {
+	background: url(/images/bg_burge_detail.svg) right top no-repeat;
+}
+
+.cont-detail {
+	padding-bottom: 75px;
+}
+
+.bootstrap-touchspin .btn-down-icon {
+	border-bottom-left-radius: 10px;
+	border-top-left-radius: 10px;
+}
+
+
+.bootstrap-touchspin .btn-up-icon {
+	border-bottom-right-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+
+.mt-5.prodrelac > .section-title {
+	padding-top: 70px;
+	padding-bottom: 40px;
+}
+
+.links li a {
+	color: #dfdfdf;
+}
+
+	.links li a:hover {
+		color: #fff;
+	}
+
+
+.widget-newsletter li {
+	color: #dfdfdf;
+}
+
+.section-search {
+	background: #E59E1D url(/images/bg_search.svg) no-repeat;
+	background-size: cover;
+	margin-bottom: 80px;
+}
+
+.pesquisa-sem-resultado {
+	margin-bottom: 400px;
+}
+
+.product-title-cart {
+	max-width: 100%;
+	color: #140C04;
+	font-family: 'Oswald', sans-serif;
+	font-size: 2rem;
+	text-transform: uppercase;
+	font-weight: bold;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	margin: 0;
+}
+
+
+.controls-cart a {
+	border: 1px solid #dae2e6;
+	padding: 8px 10px;
+}
+
+.controls-cart .qtd {
+	border: 1px solid #dae2e6;
+	padding: 8px;
+}
+
+.controls-cart .btn-up-icon {
+	border-bottom-right-radius: 10px;
+	border-top-right-radius: 10px;
+	border-left: none;
+}
+
+.controls-cart .btn-down-icon {
+	border-bottom-left-radius: 10px;
+	border-top-left-radius: 10px;
+	border-right: none;
+}
+
+.cv-title {
+	font-size: 3rem;
+	color: #2d2621;
+	font-weight: 700;
+}
+
+.cv-txt {
+	font-size: 1.8rem;
+	color: #2d2621;
+}
+
+
+#page-register {
+	background: url('/images/bg-register-w.png') right bottom no-repeat;
+	margin-right: -1px;
+	margin-top: -1px;
+	padding-top: 70px;
+}
+
+#page-login {
+	background: url('/images/bg-login-w.png') right bottom no-repeat;
+	margin-right: -1px;
+	margin-top: -1px;
+	padding-top: 70px;
+}
+
+#page-otherpage {
+	background: url('/images/bg-otherpage-w.png') right bottom no-repeat;
+	margin-right: -1px;
+	margin-top: -1px;
+	padding-top: 70px;
+}
+
+@media screen and (min-width: 700px) and (max-width: 1024px) {
+	#page-register {
+		background: url('/images/bg-register-m1024.png') right bottom no-repeat;
+		margin-right: -10px;
+		margin-top: -1px;
+	}
+
+	#page-login {
+		background: url('/images/bg-login-m1024.png') right bottom no-repeat;
+		margin-right: -1px;
+		margin-top: -1px;
+		padding-top: 70px;
+	}
+
+	#page-otherpage {
+		background: url('/images/bg-otherpage-m1024.png') right bottom no-repeat;
+		margin-right: -10px;
+		margin-top: -1px;
+	}
+}
+
+
+@media screen and (max-width: 699px) {
+	#page-register {
+		background: #FFF;
+		margin-right: -1px;
+		margin-top: -1px;
+	}
+
+		#page-register > .container {
+			padding-left: 20px;
+		}
+
+	#page-login {
+		background: #FFF;
+		margin-right: -1px;
+		margin-top: -1px;
+	}
+
+		#page-login > .container {
+			padding-left: 20px;
+		}
+
+
+	#page-otherpage {
+		background: #FFF;
+		margin-right: -1px;
+		margin-top: -1px;
+	}
+
+		#page-otherpage > .container {
+			padding-left: 20px;
+		}
+}
+
+
+@media screen and (max-width: 769px) {
+		#page-register > .container {
+			padding-left: 40px;
+		}
+
+	#page-login > .container {
+		padding-left: 40px;
+	}
+
+	#page-otherpage > .container {
+		padding-left: 40px;
+	}
+}
+
+
+.mh{
+	min-height: 500px;
+}

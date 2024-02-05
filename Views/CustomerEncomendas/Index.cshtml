@@ -1,0 +1,67 @@
+﻿@model IEnumerable<MasterBurger.Models.Encomenda>
+
+@{
+	ViewData["Title"] = "Encomendas";
+	Layout = "_CustomerDashboard";
+}
+
+<div class="pb-2 title-destaq col">
+	<h3>@ViewData["Title"]</h3>
+</div>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				Nº
+			</th>
+			<th>
+				Encomenda realizada em
+			</th>
+			<th>
+				Status
+			</th>
+			<th>
+				Encomenda entregue em
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model) {
+			<tr class="align-middle">
+				<td>
+					<b>@Html.DisplayFor(modelItem => item.EncomendaId)</b>
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.EncomendaRealizada)
+				</td>
+				<td>
+					@if (item.Status == "Encomenda Recebida") {
+						<p class="badge bg-warning text-dark">@Html.DisplayFor(modelItem => item.Status)</p>
+					} else if (item.Status == "Em Preparo") {
+						<p class="badge bg-secondary">@Html.DisplayFor(modelItem => item.Status)</p>
+					} else if (item.Status == "Pronto para Entrega") {
+						<p class="badge bg-primary">@Html.DisplayFor(modelItem => item.Status)</p>
+					} else if (item.Status == "Em Rota") {
+						<p class="badge bg-info text-dark">@Html.DisplayFor(modelItem => item.Status)</p>
+					} else if (item.Status == "Entregue") {
+						<p class="badge bg-success">@Html.DisplayFor(modelItem => item.Status)</p>
+					} else {
+						<p class="badge bg-danger">@Html.DisplayFor(modelItem => item.Status)</p>
+					}
+				</td>
+				<td>
+					@if (@item.EncomendaConcluida == null) {
+						<span>Encomenda em andamento</span>
+					} else {
+						@item.EncomendaConcluida
+					}
+				</td>
+				<td class="text-end">
+					<a asp-action="Detail" asp-route-id="@item.EncomendaId" class="btn btn-primary">Ver Detalhe</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

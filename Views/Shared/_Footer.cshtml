@@ -1,0 +1,81 @@
+﻿<a id="scroll-top" href="#top" title="Top" role="button"><i class="icon-angle-up"></i></a>
+
+<footer class="footer bg-dark">
+  <div class="footer-middle">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-sm-6">
+          <div class="widget">
+            <a href="/" class="logo">
+              <img src="~/images/logo.svg" alt="MasterBurger">
+            </a>
+
+          </div><!-- End .widget -->
+        </div><!-- End .col-lg-3 -->
+
+        <div class="col-lg-3 col-sm-6">
+          <div class="widget">
+            <h4 class="widget-title mb-0">Institucional</h4>
+            <ul class="links">
+              <li><a asp-controller="Home" asp-action="Sobre">Sobre Nós</a></li>
+              <li><a href="/Identity/Account/LoginAdmin">Admin</a></li>
+            </ul>
+          </div><!-- End .widget -->
+        </div><!-- End .col-lg-3 -->
+
+        <div class="col-lg-3 col-sm-6">
+          <div class="widget">
+            <h4 class="widget-title mb-0">Políticas</h4>
+            <ul class="links">
+              <li><a asp-controller="Home" asp-action="Privacidade">Política Privacidade</a></li>
+              <li><a asp-controller="Home" asp-action="CondicoesAvaliacoes">Termos e Condições Avaliações</a></li>
+            </ul>
+          </div><!-- End .widget -->
+        </div><!-- End .col-lg-3 -->
+
+        <div class="col-lg-3 col-sm-6">
+          <div class="widget widget-newsletter">
+            <h4 class="widget-title mb-0">Horário de Funcionamento</h4>
+            <ul class="links">
+              <li>Seg-Sex: 9:00AM - 10:00PM</li>
+              <li>Sábado: 10:00AM - 8:30PM</li>
+              <li>Domingo: 12:00PM - 5:00PM</li>
+            </ul>
+           
+          </div><!-- End .widget -->
+        </div><!-- End .col-lg-3 -->
+      </div><!-- End .row -->
+    </div><!-- End .container -->
+  </div><!-- End .footer-middle -->
+
+  <div class="container">
+    <div class="footer-bottom d-flex justify-content-between align-items-center flex-wrap" style="color: #7c7c7c;">
+      <p> &copy; MasterBurger. <span id="anoAtual"></span>. Todos os Direitos Reservados.</p>
+
+      <script>
+        document.getElementById("anoAtual").innerHTML = new Date().getFullYear();
+      </script>
+
+
+      <div class="social-icons">
+        <a href="#" class="social-icon social-instagram icon-instagram" target="_blank" title="Instagram"></a>
+        <a href="#" class="social-icon social-twitter icon-twitter" target="_blank" title="Twitter"></a>
+        <a href="#" class="social-icon social-facebook icon-facebook" target="_blank" title="Facebook"></a>
+      </div><!-- End .social-icons -->
+    </div><!-- End .footer-bottom -->
+  </div><!-- End .container -->
+</footer><!-- End .footer -->
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+  var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+  (function () {
+    var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+    s1.async = true;
+    s1.src = 'https://embed.tawk.to/6578af7870c9f2407f7f3a65/1hhfmqrla';
+    s1.charset = 'UTF-8';
+    s1.setAttribute('crossorigin', '*');
+    s0.parentNode.insertBefore(s1, s0);
+  })();
+</script>
+<!--End of Tawk.to Script-->

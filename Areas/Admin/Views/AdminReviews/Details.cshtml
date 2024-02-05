@@ -1,0 +1,43 @@
+﻿@model MasterBurger.Models.ProdutoReview
+
+@{
+    ViewData["Title"] = "Detalhe";
+}
+
+<div class="card">
+  <div class="d-md-flex justify-content-between mb-3">
+    <div class="mb-3 mb-md-0 title-pg">
+      <h2>@ViewData["Title"]</h2>
+    </div>
+  </div>
+
+  @if (TempData["Mensagem"] != null) {
+    <div class="alert alert-success col-md-6" role="alert">
+      @TempData["Mensagem"]
+    </div>
+  }
+
+	<div>
+		<p><b>Nome Cliente:</b> @Html.DisplayFor(model => model.ClienteNome)</p>
+		<p><b>Avaliação:</b> @Html.DisplayFor(model => model.Avaliacao)</p>
+		<p><b>Comentário:</b> @Html.DisplayFor(model => model.Comentario)</p>
+		<p><b>Data de Criação:</b> @Html.DisplayFor(model => model.DataCriacao)</p>
+		<p>
+			<b>Status Atual:</b>
+			@if (Model.Status == "Nova") {
+				<span class="badge bg-warning text-dark">@Html.DisplayFor(model => model.Status)</span>
+			} else if (Model.Status == "Reprovada") {
+				<span class="badge bg-danger">
+					@Html.DisplayFor(model => model.Status)
+				</span>
+			} else {
+				<span class="badge bg-success">
+					@Html.DisplayFor(model => model.Status)
+				</span>
+			}
+		</p>
+	</div>
+<div class="mt-5">
+    <a asp-action="Index" class="btn btn-primary">Voltar</a>
+</div>
+</div>

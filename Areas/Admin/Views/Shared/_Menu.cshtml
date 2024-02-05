@@ -1,0 +1,66 @@
+﻿
+<nav class="bottom-navbar">
+	<div class="container d-flex justify-content-center">
+		<ul class="nav page-navigation">
+			<li class="nav-item">
+				<a class="nav-link" asp-area="Admin" asp-controller="AdminEncomendas" asp-action="Index">
+					<i class="mdi mdi-file-document-box-outline menu-icon"></i>
+					<span class="menu-title">Encomendas</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" asp-area="Admin" asp-controller="AdminProdutos" asp-action="Index">
+					<i class="mdi mdi-food menu-icon"></i>
+					<span class="menu-title">Produtos</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" asp-area="Admin" asp-controller="AdminCategorias" asp-action="Index">
+					<i class="mdi mdi-grid menu-icon"></i>
+					<span class="menu-title">Categorias</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" asp-area="Admin" asp-controller="AdminReviews" asp-action="Index">
+					<i class="mdi mdi-assistant menu-icon"></i>
+					<span class="menu-title">Reviews</span>
+				</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link" asp-area="Admin" asp-controller="AdminBanners" asp-action="Index">
+					<i class="mdi mdi-bulletin-board menu-icon"></i>
+					<span class="menu-title">Banners</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" asp-area="Admin" asp-controller="AdminUtilizadores" asp-action="Index">
+					<i class="mdi mdi-clipboard-account menu-icon"></i>
+					<span class="menu-title">Utilizadores</span>
+				</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link" asp-area="Admin" asp-controller="AdminRelatorios" asp-action="Index">
+					<i class="mdi mdi-file-chart menu-icon"></i>
+					<span class="menu-title">Relatórios</span>
+				</a>
+			</li>
+
+			<li class="nav-item">
+				<a class="nav-link" asp-area="Admin" asp-controller="AdminCupons" asp-action="Index">
+					<i class="mdi mdi-percent menu-icon"></i>
+					<span class="menu-title">Cupons</span>	
+				</a>
+			</li>
+
+
+			<li class="nav-item nav-profile dropdown align-self-lg-center ps-md-3">
+					<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" method="post">
+						<button type="submit" class="nav-link btn btn-link text-dark d-flex"><span class="d-flex "><i class="mdi mdi-logout text-primary"></i>Logout</span></button>
+					</form>
+			</li>
+		</ul>
+
+	</div>
+</nav>

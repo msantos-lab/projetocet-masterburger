@@ -1,0 +1,122 @@
+﻿@model MasterBurger.ViewsModels.HomeViewModel
+
+@{
+	ViewData["Title"] = "Home";
+}
+
+@await Component.InvokeAsync("BannerPrincipal")
+
+<!-- AREA PRODUTOS -->
+<section class="new-products-section">
+	<div class="container">
+		<div class="section-title">
+			<h2>Destaques</h2>
+		</div>
+
+		<div class="row mt-5">
+			@if (Model.ProdutosPreferidos != null) {
+				var produtosDisponiveis = Model.ProdutosPreferidos.Where(p => p.IsDisponivel).Take(10).ToList();
+				if (produtosDisponiveis.Any()) {
+					foreach (var produto in produtosDisponiveis) {
+
+						<partial name="_ListagemProdutos" for="@produto" />
+					}
+				} else {
+					<p>Nenhum produto disponível no momento.</p>
+				}
+			}
+		</div><!-- End .featured-proucts -->
+	</div>
+</section>
+
+<!-- Pesquisa -->
+<section class="section-search">
+	<div class="container">
+		<div class="row">
+			<div class="d-md-flex justify-content-between align-items-center">
+				<div class="col-md-6 d-flex">
+					<h3 class="mb-0">Delicie-se com sabores irresistíveis no mundo MasterBurger!</h3>
+				</div>
+				<div class="col-md-6 d-flex">
+					<partial name="_PesquisaProdutoHome" />
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+
+<!-- BANNERS -->
+<section class="bg-light my-5">
+  @{
+    byte[] bannerSemImg = new byte[] { 0xD3, 0x1D, 0xC0 };
+  }
+  <div class="container">
+    <div class="banner-offers row row-sm">
+      <div class="col-md-6 mb-2 mb-0-md">
+        <div class="home-banner">
+          @if (Model.Halfbanner1 != null && Model.Halfbanner1.BannerBase64 != null) {
+            string linkBanner = Model.Halfbanner1.Link != null ? "https://" + Model.Halfbanner1.Link : "/";
+            string targetBanner = Model.Halfbanner1.Comportamento != null ? Model.Halfbanner1.Comportamento : "_self";
+
+            if (Model.Halfbanner1.BannerBase64 != null && Model.Halfbanner1.BannerBase64.SequenceEqual(bannerSemImg)) {
+              bool banner1SemImg = Model.Halfbanner1.BannerBase64.SequenceEqual(bannerSemImg);
+              if (banner1SemImg) {
+                <a href="@linkBanner" target="@targetBanner">
+                  <img src="~/images/banners/halfbanner_default.png" alt="MasterBurger" />
+                </a>
+              }
+            } else {
+              <a href="@linkBanner" target="@targetBanner">
+                <img src="data:image/jpeg;base64, @Convert.ToBase64String(Model.Halfbanner1.BannerBase64)" alt="@Model.Halfbanner1.TituloPrincipal" />
+              </a>
+            }
+          }
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="home-banner">
+          @if (Model.Halfbanner2 != null && Model.Halfbanner2.BannerBase64 != null) {
+            string linkBanner = Model.Halfbanner2.Link != null ? "https://" + Model.Halfbanner2.Link : "/";
+            string targetBanner = Model.Halfbanner2.Comportamento != null ? Model.Halfbanner2.Comportamento : "_self";
+
+            if (Model.Halfbanner2.BannerBase64 != null && Model.Halfbanner2.BannerBase64.SequenceEqual(bannerSemImg)) {
+              bool banner2SemImg = Model.Halfbanner2.BannerBase64.SequenceEqual(bannerSemImg);
+              if (banner2SemImg) {
+                <a href="@linkBanner" target="@targetBanner">
+                  <img src="~/images/banners/halfbanner_default.png" alt="MasterBurger" />
+                </a>
+              }
+            } else {
+              <a href="@linkBanner" target="@targetBanner">
+                <img src="data:image/jpeg;base64, @Convert.ToBase64String(Model.Halfbanner2.BannerBase64)" alt="@Model.Halfbanner2.TituloPrincipal" />
+              </a>
+            }
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="home-banner banner-deals">
+      @if (Model.Banner != null && Model.Banner.BannerBase64 != null) {
+        string linkBanner = Model.Banner.Link != null ? "https://" + Model.Banner.Link : "/";
+        string targetBanner = Model.Banner.Comportamento != null ? Model.Banner.Comportamento : "_self";
+
+        if (Model.Banner.BannerBase64 != null && Model.Banner.BannerBase64.SequenceEqual(bannerSemImg)) {
+          bool banner3SemImg = Model.Banner.BannerBase64.SequenceEqual(bannerSemImg);
+          if (banner3SemImg) {
+            <a href="@linkBanner" target="@targetBanner">
+              <img src="~/images/banners/banner_default.png" alt="MasterBurger" />
+            </a>
+          }
+        } else {
+          <a href="@linkBanner" target="@targetBanner">
+            <img src="data:image/jpeg;base64, @Convert.ToBase64String(Model.Banner.BannerBase64)" alt="@Model.Banner.TituloPrincipal" />
+          </a>
+        }
+      }
+    </div>
+  </div>
+</section>
+

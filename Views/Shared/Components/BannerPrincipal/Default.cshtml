@@ -1,0 +1,43 @@
+﻿@model BannerPrincipalViewModel
+
+<div class="home-slider owl-carousel owl-theme owl-carousel-lazy show-nav-hover nav-big mb-2 text-uppercase">
+  @{
+    int count = 1;
+    string home_slide = string.Empty;
+    string link = string.Empty;
+    byte[] bannerSemImg = new byte[] { 0xD3, 0x1D, 0xC0 };
+    IEnumerable<Banner> ListaSliders = Model.Banners.Where(b => b.Posicao == "slider");
+  }
+
+  @if (ListaSliders.Any()) {
+    foreach (var banner in ListaSliders) {
+      home_slide = "home-slide" + count;
+      link = "https://" + @banner.Link;
+
+      <!-- End .home-slide -->
+
+      <div class="home-slide @home_slide banner">
+        <a href="@link" target="@banner.Comportamento">
+          @if (banner.BannerBase64 != null && banner.BannerBase64.SequenceEqual(bannerSemImg)) {
+            <img class="owl-lazy slide-bg" src="assets/images/lazy.png" data-src="~/images/slider/slide_default.png" />
+          } else {
+            <img class="owl-lazy slide-bg" src="assets/images/lazy.png" data-src="data:image/jpeg;base64, @Convert.ToBase64String(banner.BannerBase64)" alt="@banner.TituloPrincipal">
+            <div class="container">
+              <div class="banner-layer banner-layer-middle">
+                @Html.Raw(banner.Conteudo)
+              </div><!-- End .banner-layer -->
+            </div>
+          }
+        </a>
+      </div>
+
+      count++;
+    }
+  } else {
+    <div class="home-slide @home_slide banner">
+      <a href="/" target="_self">
+        <img class="slide-bg" src="~/images/slider/slide_default.png" />
+      </a>
+    </div>
+  }
+</div><!-- End .home-slider -->

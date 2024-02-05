@@ -1,0 +1,140 @@
+﻿@model CheckoutViewModel
+
+@{
+	ViewData["Title"] = "Checkout";
+}
+
+<div class="container mt-6">
+	<div class="row d-flex">
+		<div class="col-md-4 mb-3 mb-lg-0">
+			<div class="d-flex text-uppercase">
+				<h2>Dados de Envio</h2>
+			</div>
+			<div>
+				<div class="row">
+					@if (Model.DadosUtilizador != null && Model.DadosUtilizador.Any()) {
+						foreach (var dados in Model.DadosUtilizador) {
+							<p><strong>Nome:</strong> @dados.Nome</p>
+							<p><strong>Apelido:</strong> @dados.Apelido</p>
+							<p><strong>Telemóvel:</strong> @dados.Telemovel</p>
+							<p><strong>NIF:</strong> @dados.NIF</p>
+							<p><strong>Morada:</strong> @dados.Morada</p>
+							<p><strong>Localidade:</strong> @dados.Localidade</p>
+							<p><strong>Código Postal:</strong> @dados.CodigoPostal</p>
+						}
+					} else {
+						<p>Não foi encontrado dados para a entrega registado.</p>
+						<p>	<a class="btn btn-primary" asp-controller="CustomerDados" asp-action="DadosRegistar">Registar Dados Pessoais</a></p>
+					}
+
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-8">
+			<div>
+				<div class="d-flex text-uppercase">
+					<h2>Resumo</h2>
+				</div>
+			</div>
+			@if (Model.ItensDoCarrinho != null && Model.ItensDoCarrinho.Any()) {
+				<table class="table table-cart">
+					<thead>
+						<tr>
+							<th class="product-col">Produto</th>
+							<th class="price-col">Preço</th>
+							<th class="qty-col">Quantidade</th>
+							<th>Subtotal</th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							decimal subtotalGeral = 0;
+							decimal subtotalItem = 0;
+						}
+
+						@foreach (var item in Model.ItensDoCarrinho) {
+							subtotalItem = item.Quantidade * item.Produto.Preco;
+							subtotalGeral += subtotalItem;
+
+							<tr class="product-row">
+								<td colspan="2" class="product-col d-flex align-items-center justify-content-start">
+									@if (item.Produto.ImagemBase64 != null && item.Produto.ImagemBase64.Length > 0) {
+										<span class="product-image pe-2">
+											<img src="data:image/jpeg;base64, @Convert.ToBase64String(item.Produto.ImagemBase64)" alt="@item.Produto.Nome" width="100" />
+										</span>
+									} else {
+										<span class="product-image">
+											<img src="~/images/default.png" alt="@item.Produto.Nome" width="100" />
+										</span>
+									}
+
+									<h2 class="product-title product-title-cart" style="font-size: 1.5rem;">
+										<a href="/Produto/Details?ProdutoId=@item.Produto.ProdutoId">@item.Produto.Nome</a>
+									</h2>
+								</td>
+								<td>@item.Produto.Preco.ToString("c")</td>
+								<td class="align-middle text-center">@item.Quantidade</td>
+								<td>@subtotalItem.ToString("c")</td>
+							</tr>
+						}
+
+				</table>
+				<table class="table table-totals py-2">
+					<tfoot>
+						@{
+							string descontoPercentualTemporario = string.Empty;
+							if (Context.Request.Cookies.TryGetValue("DescontoPercentualTemporario", out var cookieValor)) {
+								descontoPercentualTemporario = cookieValor;
+							}
+						}
+
+						@if (!string.IsNullOrEmpty(descontoPercentualTemporario)) {
+
+							<tr style="font-size: 15px;">
+								<td class="text-uppercase py-3 px-3">Subtotal</td>
+								<td class="py-3 px-3">@subtotalGeral.ToString("c")</td>
+							</tr>
+							<tr class="bg-light" style="font-size: 15px;">
+								<td class="text-uppercase py-3 px-3">Desconto Aplicado</td>
+								<td class="py-3 px-3">- @descontoPercentualTemporario%</td>
+							</tr>
+							<tr>
+								<td class="text-uppercase">Total</td>
+								<td>@Model.CarrinhoCompraTotal.ToString("c")</td>
+							</tr>
+						} else {
+							<tr>
+								<td class="text-uppercase">Total</td>
+								<td>@Model.CarrinhoCompraTotal.ToString("c")</td>
+							</tr>
+						}
+					</tfoot>
+
+				</table>
+			} else {
+				<p>Nenhum item no carrinho.</p>
+			}
+
+
+			<div class="row mb-5 mt-5 d-flex justify-content-between">
+				<div class="col">
+					<form asp-action="Checkout" method="post" class="form-horizontal" role="form">
+						<div class="row">
+							<div class="form-group">
+								<input class="btn btn-checkout" type="submit" value="Comprar" />
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="col d-flex justify-content-end">
+					<div class="form-group">
+						<a class="btn btn-primary" asp-controller="CarrinhoCompra" asp-action="Index">Retornar ao Carrinho</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+

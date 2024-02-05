@@ -1,0 +1,49 @@
+﻿@model MasterBurger.Models.Banner
+
+@{
+	ViewData["Title"] = "Delete";
+}
+
+<div class="card">
+	<div class="row title-pg">
+		<h2>@ViewData["Title"]</h2>
+	</div>
+
+	<div class="alert alert-danger col-3" role="alert">
+		Tem a certeza de que pretende apagar?
+	</div>
+	<div>
+		<dl class="row">
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.TituloPrincipal)
+			</dt>
+			<dd class="col-sm-10">
+				@Html.DisplayFor(model => model.TituloPrincipal)
+			</dd>
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.Comportamento)
+			</dt>
+			<dd class="col-sm-10">
+				@Html.DisplayFor(model => model.Comportamento)
+			</dd>
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.Link)
+			</dt>
+			<dd class="col-sm-10">
+				@Html.DisplayFor(model => model.Link)
+			</dd>
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.BannerBase64)
+			</dt>
+			<dd class="col-sm-10">
+				<img src="data:image/jpeg;base64, @Convert.ToBase64String(Model.BannerBase64)" alt="Banner" width="210">
+			</dd>
+		</dl>
+
+		<form asp-action="Delete">
+			<input type="hidden" asp-for="BannerId" />
+			<input type="submit" value="DELETAR" class="btn btn-danger" />
+			<a asp-action="Index" class="btn btn-primary">Voltar</a>
+		</form>
+	</div>
+</div>

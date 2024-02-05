@@ -1,0 +1,119 @@
+﻿@model Encomenda
+
+@{
+	ViewData["Title"] = "Detalhe";
+	Layout = "_CustomerDashboard";
+}
+
+
+<div class="row mb-2">
+	<h4>Detalhe da Encomenda - Nº @Model.EncomendaId</h4>
+</div>
+<div class="row mb-2">
+	<p> <strong> Data da Encomenda: </strong>@Model.EncomendaRealizada</p>
+	<p>
+		<strong> Encomenda entregue em:</strong>
+		@if (Model.EncomendaConcluida == null) {
+			<span>Encomenda em andamento</span>
+		} else {
+			@Model.EncomendaConcluida
+		}
+
+	<p> <strong> Status: </strong>					
+		@if (Model.Status == "Encomenda Recebida") {
+		<span class="badge bg-warning text-dark">@Html.DisplayFor(modelItem => Model.Status)</span>
+			} else if (Model.Status == "Em Preparo") {
+			<span class="badge bg-secondary">@Html.DisplayFor(modelItem => Model.Status)</span>
+			} else if (Model.Status == "Pronto para Entrega") {
+			<span class="badge bg-primary">@Html.DisplayFor(modelItem => Model.Status)</span>
+			} else if (Model.Status == "Em Rota") {
+			<span class="badge bg-info text-dark">@Html.DisplayFor(modelItem => Model.Status)</span>
+			} else if (Model.Status == "Entregue") {
+			<span class="badge bg-success">@Html.DisplayFor(modelItem => Model.Status)</span>
+			} else {
+			<span class="badge bg-danger">@Html.DisplayFor(modelItem => Model.Status)</span>
+			}</p>
+
+		@if (Model.CodigoCupom != null) {
+		<p><b>Voucher:</b> @Model.CodigoCupom</p>
+		<p><b>Percentual:</b> @Model.DescontoPercentual%</p>
+		}
+</div>
+
+
+<h5>Itens da Encomenda</h5>
+<table class="table table-cart">
+	<thead>
+		<tr>
+			<th class="product-col">Produto</th>
+			<th class="price-col">Preço</th>
+			<th class="qty-col">Quantidade</th>
+			<th>Subtotal</th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			decimal subtotalGeral = 0;
+			decimal subtotalItem = 0;
+		}
+		@foreach (var item in Model.EncomendaItens) {
+
+			subtotalItem = item.Quantidade * item.Produto.Preco;
+			subtotalGeral += subtotalItem;
+
+			<tr class="product-row">
+				<td colspan="2" class="product-col d-flex align-items-center justify-content-start">
+					@if (@item.Produto.ImagemBase64 != null && @item.Produto.ImagemBase64.Length > 0) {
+						<span class="product-image pe-2">
+							<img src="data:image/jpeg;base64, @Convert.ToBase64String(@item.Produto.ImagemBase64)" alt="@item.Produto.Nome" width="100" />
+						</span>
+					} else {
+						<span class="product-image">
+							<img src="~/images/default.png" alt="@item.Produto.Nome" width="100" />
+						</span>
+					}
+
+					<h2 class="product-title product-title-cart" style="font-size: 1.5rem;">
+						<a href="/Produto/Details?ProdutoId=@item.Produto.ProdutoId">@item.Produto.Nome</a>
+					</h2>
+				</td>
+				<td>@item.Produto.Preco.ToString("c")</td>
+
+				<td class="align-middle text-center">@item.Quantidade</td>
+				<td>@subtotalItem.ToString("c")</td>
+			</tr>
+
+		}
+	</tbody>
+
+</table>
+<table class="table table-totals py-2">
+	<tfoot>
+		@if (Model.CodigoCupom != null) {
+
+			<tr style="font-size: 15px;">
+				<td class="text-uppercase py-3 px-3">Subtotal</td>
+				<td class="py-3 px-3">@subtotalGeral.ToString("c")</td>
+			</tr>
+			<tr class="bg-light" style="font-size: 15px;">
+				<td class="text-uppercase py-3 px-3">Desconto Aplicado</td>
+				<td class="py-3 px-3">- @Model.DescontoPercentual%</td>
+			</tr>
+			<tr>
+				<td class="text-uppercase">Total</td>
+				<td>@Model.EncomendaTotal.ToString("c")</td>
+			</tr>
+		} else {
+			<tr>
+				<td class="text-uppercase">Total</td>
+				<td>@Model.EncomendaTotal.ToString("C2")</td>
+			</tr>
+		}
+
+	</tfoot>
+</table>
+
+
+<div class="mt-4">
+	<a asp-action="Index" class="btn btn-primary">Voltar</a>
+</div>

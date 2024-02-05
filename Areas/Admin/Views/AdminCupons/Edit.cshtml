@@ -1,0 +1,62 @@
+﻿@model MasterBurger.Models.Cupom
+
+@{
+	ViewData["Title"] = "Editar Cupom";
+}
+
+<div class="card">
+	<div class="d-md-flex justify-content-between mb-3">
+		<div class="mb-3 mb-md-0 title-pg">
+			<h2>@ViewData["Title"]</h2>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-4">
+			<form asp-action="Edit">
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+				<input type="hidden" asp-for="CupomId" />
+				<div class="form-group">
+					<label asp-for="Codigo" class="control-label">Código:</label>
+					<input asp-for="Codigo" class="form-control" />
+					<span asp-validation-for="Codigo" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="DescontoPercentual" class="control-label">Percentual de Desconto %:</label>
+					<input asp-for="DescontoPercentual" class="form-control" />
+					<span asp-validation-for="DescontoPercentual" class="text-danger"></span>
+				</div>
+				<div class="form-group form-check">
+					<label class="form-check-label">
+						<input class="form-check-input" asp-for="Status" /> Ativo
+					</label>
+				</div>
+				<div class="form-group">
+					<label asp-for="DataInicio" class="control-label">Data Início:</label>
+					<input asp-for="DataInicio" class="form-control" />
+					<span asp-validation-for="DataInicio" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="DataFim" class="control-label">Data Fim:</label>
+					<input asp-for="DataFim" class="form-control" />
+					<span asp-validation-for="DataFim" class="text-danger"></span>
+				</div>
+				<div class="form-group d-flex gap-3 mt-4">
+					<div>
+						<input type="submit" value="Salvar" class="btn btn-primary" />
+					</div>
+					<div>
+						<a asp-action="Index" class="btn btn-primary">Voltar</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

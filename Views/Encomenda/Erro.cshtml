@@ -1,0 +1,33 @@
+﻿@{
+	ViewData["Title"] = "Carrinho de Compra";
+}
+<div class="container mt-6 mh">
+  <div class="row">
+
+    <div class="pb-2 title-destaq col">
+      <h2>Carrinho de compra vazio</h2>
+    </div>
+
+    <div class="container mt-3 ps-5 ps-0-md">
+      <div class="row">
+        <div class="col-md-2 mb-3 mb-md-0 d-flex justify-content-center-md">
+          <script src="https://cdn.lordicon.com/lordicon.js"></script>
+          <lord-icon src="https://cdn.lordicon.com/ftsmuekx.json"
+                     trigger="loop"
+                     delay="2000"
+                     stroke="light"
+                     colors="primary:#121331,secondary:#fc6727"
+                     style="width:120px;height:120px">
+          </lord-icon>
+        </div>
+        <div class="col-md-7">
+          <p class="cv-title">Oops!</p>
+          <p class="cv-txt"> Parece que seu carrinho está vazio.</p>
+          <p class="cv-txt"> Explore nossas delícias e adicione sabores incríveis à sua jornada gastronômica!</p>
+          <a class="btn btn-primary mt-2" asp-controller="Produto" asp-action="Novidades">Ver as Novidades</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

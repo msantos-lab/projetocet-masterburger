@@ -1,0 +1,160 @@
+﻿@using System.Globalization;
+@model CarrinhoCompraViewModel
+
+
+@{
+	ViewData["Title"] = "Carrinho de Compra";
+}
+
+<div class="container mt-6 mb-5 mh">
+	<div class="pb-2 title-destaq col">
+		<h2>@ViewData["Title"]</h2>
+	</div>
+	<div class="row">
+		@if (TempData["ErrorMessage"] != null) {
+			<div id="error-message" class="alert alert-danger">
+				@Html.Raw(@TempData["ErrorMessage"])
+			</div>
+		}
+
+		@if (@TempData["MensagemVoucher"] != null) {
+			<div class="alert @((TempData["MensagemVoucher"].ToString().Contains("inserido")) ? "alert-success" : "alert-danger")">
+
+				<p>@TempData["MensagemVoucher"] </p>
+			</div>
+		}
+
+		<div class="col-lg-12">
+			<div class="cart-table-container">
+				<table class="table table-cart">
+					<thead>
+						<tr>
+							<th colspan="2" class="product-col">Produto</th>
+							<th class="price-col">Preço</th>
+							<th class="qty-col">Quantidade</th>
+							<th>Subtotal</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							decimal subtotalGeral = 0;
+							decimal subtotalItem = 0;
+						}
+
+						@foreach (var item in Model.CarrinhoCompra.CarrinhoCompraItems) {
+							subtotalItem = item.Quantidade * item.Produto.Preco;
+							subtotalGeral += subtotalItem;
+
+							<tr class="product-row">
+								<td colspan="2" class="product-col">
+									<figure class="product-image-container">
+										<a href="/Produto/Details?ProdutoId=@item.Produto.ProdutoId" class="product-image">
+											<img src="data:image/jpeg;base64, @Convert.ToBase64String(@item.Produto.ImagemBase64)" alt="@item.Produto.Nome" width="100">
+										</a>
+									</figure>
+
+									<h2 class="product-title product-title-cart">
+										<a href="/Produto/Details?ProdutoId=@item.Produto.ProdutoId">@item.Produto.Nome</a>
+									</h2>
+								</td>
+								<td>
+									@item.Produto.Preco.ToString("c")
+
+								</td>
+								<td>
+									<div class="d-flex align-items-center justify-content-center controls-cart">
+										@if (item.Quantidade == 1) {
+											<a class="btn-control-cart btn-down-icon" asp-controller="CarrinhoCompra" asp-action="RemoverItemDoCarrinhoCompra"
+												 asp-route-produtoId="@item.Produto.ProdutoId">
+												-
+											</a>
+										} else {
+											<a class="btn-control-cart btn-down-icon" asp-controller="CarrinhoCompra" asp-action="DiminuirItemDoCarrinhoCompra"
+												 asp-route-produtoId="@item.Produto.ProdutoId">
+												-
+											</a>
+										}
+
+										<div class="qtd" id="quantidade-@item.Produto.ProdutoId">@item.Quantidade</div>
+
+										<a class="btn-control-cart btn-up-icon aumentar-quantidade"
+											 asp-controller="CarrinhoCompra"
+											 asp-action="AumentarItemDoCarrinhoCompra"
+											 asp-route-produtoId="@item.Produto.ProdutoId"
+											 asp-route-quantidadeDesejada="@item.Quantidade.ToString()">
+											+
+										</a>
+
+
+									</div>
+								</td>
+								<td>@subtotalItem.ToString("c")</td>
+								<td>
+									<a asp-controller="CarrinhoCompra" asp-action="ExcluirItemDoCarrinhoCompra" asp-route-produtoId="@item.Produto.ProdutoId"><img src="~/images/icons/delete.png" width="20" height="20" class="text-center d-inline" /></a>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+				<table class="table table-totals py-2">
+					<tfoot>
+						@{
+							string descontoPercentualTemporario = string.Empty;
+							if (Context.Request.Cookies.TryGetValue("DescontoPercentualTemporario", out var cookieValor)) {
+								descontoPercentualTemporario = cookieValor;
+							}
+						}
+
+						@if (!string.IsNullOrEmpty(descontoPercentualTemporario)) {
+
+							<tr style="font-size: 15px;">
+								<td class="text-uppercase py-3 px-3">Subtotal</td>
+								<td class="py-3 px-3">@subtotalGeral.ToString("c")</td>
+							</tr>
+							<tr class="bg-light" style="font-size: 15px;">
+								<td class="text-uppercase py-3 px-3">Desconto Aplicado</td>
+								<td class="py-3 px-3">- @descontoPercentualTemporario%</td>
+							</tr>
+							<tr>
+								<td class="text-uppercase">Total</td>
+								<td>@Model.CarrinhoCompraTotal.ToString("c")</td>
+							</tr>
+						} else {
+							<tr>
+								<td class="text-uppercase">Total</td>
+								<td>@Model.CarrinhoCompraTotal.ToString("c")</td>
+							</tr>
+						}
+
+					</tfoot>
+				</table>
+
+				<div class="row mb-5 mt-5 d-flex justify-content-between align-items-center">
+					<div class="col-md-6">
+						<div class="checkout-methods">
+							<a class="btn btn-checkout " asp-controller="Encomenda" asp-action="Checkout">Concluir Encomenda</a>
+						</div>
+					</div>
+
+					<div class="col-md-6 mt-3 mb-lg-0">
+						<form asp-controller="CarrinhoCompra" asp-action="AplicarCupom" method="post" class="mb-0">
+							<div class="d-flex gap-3 justify-content-end align-items-center">
+								<div class="form-group col-7">
+									<label asp-for="CodigoCupom">Voucher:</label>
+									<input asp-for="CodigoCupom" class="form-control" />
+								</div>
+								<div class="d-flex gap-3">
+									<button type="submit" class="btn btn-primary">Aplicar</button>
+									<a class="btn btn-primary " asp-controller="CarrinhoCompra" asp-action="RemoverCupom">Remover</a>
+								</div>
+							</div>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

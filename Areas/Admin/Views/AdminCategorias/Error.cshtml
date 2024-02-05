@@ -1,0 +1,16 @@
+﻿@model MasterBurger.Areas.Admin.Views.ViewsModels.ErrorCategoriaViewModel
+
+@{
+	ViewData["Title"] = "Erro";
+}
+
+
+<div class="card">
+	<h2 class="text-danger">Erro ao exluir a categoria</h2>
+	<div class="text-danger mb-4">
+		@Model.Mensagem
+	</div>
+
+	<div>	<a asp-action="Index" class="btn btn-primary">Voltar</a></div>
+
+</div>
